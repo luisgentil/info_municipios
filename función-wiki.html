@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head> <title>Wiki - función</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Buscando una función Wikipedia</title>
+
+</head>
+
+<body>
+
+<div id="caja2" onclick="cacan()">Aquí mostrará el contenido cacan()</div>
+
+<iframe id="iframePagina1" src="../recursos desfasados/borrar2.html"></iframe> 
+<!--funciona en el mismo directorio, pero no en wwww. Así es la vida, -->
+<iframe id="iframePagina2" src="https://es.wikipedia.org/wiki/Montehermoso"></iframe> 
+
+<div id="caja" >Aquí mostrará el contenido myFunction()</div>
+
+<script>
+function myFunction() {
+	var iframeDocument = document.getElementById('iframePagina2').contentDocument;
+	var myDiv = iframeDocument; //iframeDocument.getElementById('firstHeading');
+    document.getElementById("caja").innerHTML = myDiv;}
+
+function cacan() {
+	var xmlhttp;
+	var myDiv;
+	if (window.XMLHttpRequest) {
+		xmlhttp=new XMLHttpRequest(); 
+		}
+	else {
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP"); 
+		}
+
+xmlhttp.onreadystatechange = function() {
+	var myDiv;
+	if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	var myDiv = xmlhttp.responseText;
+//	document.getElementById("caja").innerHTML = myDiv.length;
+	document.getElementById("caja").innerText=xmlhttp.responseText; 
+		}
+	else {
+		document.getElementById("caja").innerHTML="cargando..."; }
+	}
+// tampoco funciona con http:, sólo con local files, por la Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at
+// sí funciona al añadir origin=*, para saltar el CORS.
+
+xmlhttp.open("GET","https://es.wikipedia.org/w/api.php?action=query&titles=Montehermoso&prop=revisions&rvprop=content&format=json&origin=*",true);
+xmlhttp.send();	
+}
+</script>
+</body>
+</html>

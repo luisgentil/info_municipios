@@ -132,12 +132,12 @@ Tercer Prototipo:  además, dispone de una función que averigua las secciones q
 ##PMV  
 El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra información; cuando se pincha un botón, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio, busca información sobre el municipio en Internet, y presenta la lista de secciones de la wikipedia en la ventana de información.  El PMV funciona en escritorio *y en Android*.
 
-30/08/2017  
-Fases de trabajo  							versión		terminado  
---------------------------------------------------------------------------------------------------  
--Elegir base de código 							0.0 		 ok 31/08  
--Separar html, css, js 							0.1 		 ok 31/08  
--Definir funciones necesarias:  
+	30/08/2017  
+	Fases de trabajo  							versión		terminado  
+	--------------------------------------------------------------------------------------------------  
+	-Elegir base de código 						0.0 		 ok 31/08  
+	-Separar html, css, js 						0.1 		 ok 31/08  
+	-Definir funciones necesarias:  
 	-Inicial, geolocalizar posición					0.1 		 ok 07/09  
 	-Centrar mapa  							0.2 		 ok 31/08  
 	-Pintar marcador 						0.2 		 ok 04/09  
@@ -159,20 +159,20 @@ Fases de trabajo  							versión		terminado
 			-extraer (hasta "==")  
 
 
-Veo dos opciones para descargar información de Wikipedia:
-	-realizar las consultas directamente a Wikipedia, 
-	-realizar la consulta a una BD Firebase que contenga la información previamente preparada,
+	Veo dos opciones para descargar información de Wikipedia:
+		-realizar las consultas directamente a Wikipedia, 
+		-realizar la consulta a una BD Firebase que contenga la información previamente preparada,
 
-Ventajas  
-1ª opción: directamente 					2ª opción: Firebase			  
--casi tengo el código  						-info siempre correcta  
-								-puede comenzar con info genérica  
-								-usa menos datos desde la app  
+	Ventajas  
+	1ª opción: directamente 					2ª opción: Firebase			  
+	-casi tengo el código  						-info siempre correcta  
+									-puede comenzar con info genérica  
+									-usa menos datos desde la app  
 
-Desventajas
-1ª opción:							2ª opción:				  
--hay que desarrollar una función que extraiga 			-hay que generar la información antes de usar la app  
--información útil de cualquier página de wikipedia,desde la app,  
--usará muchos, muchos datos desde la app			-hay que desarrollar otra app, para extraer info de Wikipedia  
+	Desventajas
+	1ª opción:							2ª opción:				  
+	-hay que desarrollar una función que extraiga 			-hay que generar la información antes de usar la app  
+	-información útil de cualquier página de wikipedia,desde la app,  
+	-usará muchos, muchos datos desde la app			-hay que desarrollar otra app, para extraer info de Wikipedia  
 
 

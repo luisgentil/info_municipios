@@ -132,12 +132,12 @@ Tercer Prototipo:  además, dispone de una función que averigua las secciones q
 ##PMV  
 El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra información; cuando se pincha un botón, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio, busca información sobre el municipio en Internet, y presenta la lista de secciones de la wikipedia en la ventana de información.  El PMV funciona en escritorio *y en Android*.
 
-30/08/2017  
+	-30/08/2017  
 	Fases de trabajo  							versión		terminado  
-----------------------------------------------------------------------  
--Elegir base de código 							0.0 		 ok 31/08  
--Separar html, css, js 							0.1 		 ok 31/08  
--Definir funciones necesarias:  
+	----------------------------------------------------------------------  
+	-Elegir base de código 							0.0 		 ok 31/08  
+	-Separar html, css, js 							0.1 		 ok 31/08  
+	-Definir funciones necesarias:  
 	-Inicial, geolocalizar posición				0.1 		 ok 07/09  
 	-Centrar mapa  								0.2 		 ok 31/08  
 	-Pintar marcador 							0.2 		 ok 04/09  

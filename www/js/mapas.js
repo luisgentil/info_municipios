@@ -1,7 +1,8 @@
-
+/////////////////////// variables globales y otras gaitas////////////////
 var initLatLong = {lat: 37.893949, lng: -6.749115};  // coordenadas de inicio ;)37.893949, -6.749115
 var initZoom = 8;                                        //37.419193,-5.991978 estas son las coordenadas de sevilla 
 
+//////////////////////// sección o "bucle" principal  ///////////////////
 // el mapa se inicia
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -9,7 +10,7 @@ function initMap() {
   center: initLatLong       //{lat: 40.731, lng: -73.997}
   });
   
-  // Encuentra la situación actual del dispositivo
+/*  // Encuentra la situación actual del dispositivo
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = {lat: position.coords.latitude, lng: position.coords.longitude};
@@ -21,20 +22,37 @@ function initMap() {
   else {  // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
   }
-  
+  */
   var geocoder = new google.maps.Geocoder;
   var infowindow = new google.maps.InfoWindow;
-  
+
+  localizar(map, geocoder);   
+
   // con este eventListener accedemos a las coordenadas del click
   map.addListener('click', function(e) {
     reverseGeocode(geocoder, e.latLng, map)}); //  mostrarInfo(e.latLng, map, "foo")});
+
   
 //  document.getElementById('submit').addEventListener('click', function() {
 //  geocodeLatLng(geocoder, map, infowindow);
 //  });
 }
+// 
+var actualizando = setInterval(actualizar, 5000); // este valor debería ser 60000, al menos, 
+                                                  // pero lo dejo para test en PhoneGap
+//////////////////////fin del bucle principal, comienza la sección de funciones ///////////////////
 
 // Otras funciones para al App, algunas sirven y otras no XD
+
+
+function actualizar(geocoder) {
+  var d = new Date ();
+  document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString();
+  localizar(map, geocoder);//esto no va bien
+}
+
+
+
 function handleLocationError(browserHasGeolocation) {
   console.log("Error de localización");
 }
@@ -50,6 +68,21 @@ function pintarGlobo(latLong, map, info) { // pinta un globo y centra el mapa, s
       map.setCenter(latLong);
       infowindow.setContent(info);
       infowindow.open(map, marker);
+}
+
+
+function localizar(map, geocoder){  // Encuentra la situación actual del dispositivo
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {lat: position.coords.latitude, lng: position.coords.longitude};
+      reverseGeocode(geocoder, pos, map);
+      map.setCenter(pos);
+      map.setZoom(12);
+    }, function() {handleLocationError(true)});
+  } 
+  else {  // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
 }
 
 
@@ -76,7 +109,7 @@ function reverseGeocode(geocoder, latLong, map) { // esto funciona
           }
 // de todos los valores que pueda haber encontrado, elejimos el primero 
           var link = '<a href=\"https://es.wikipedia.org/wiki/'+arrayLocalidad[0] +"\""+'>'+arrayLocalidad[0]+ '</a>';
-          var info = '<div class="municipio">' + arrayLocalidad[0] + '</div> ' + link; //+ '<a href="https://es.wikipedia.org/wiki/"+arrayLocalidad[0]"+'</a>'; 
+          var info = '<div class="municipio">' + arrayLocalidad[0] + '</div> '; //+ '<a href="https://es.wikipedia.org/wiki/"+arrayLocalidad[0]"+'</a>'; 
 // para comprobar toooodos los resultados en la consola:
 /*          for (j = 0; j < results.length; j++) {
             console.log("---" + j + "---");
@@ -91,6 +124,7 @@ function reverseGeocode(geocoder, latLong, map) { // esto funciona
       else { var info = 'Geocoder failed due to: ' + status;}
 // con el nombre encontrado llamamos a la función para añadirlo al mapa
      pintarGlobo(latLong, map, info);
+     document.getElementById("informar").innerHTML = link;
 // ¿eliminar la siguiente línea tras el desarrollo?
 //     document.getElementById('floating-panel').innerHTML = results[0].address_components[2].long_name + " /// " + results[1].address_components[2].long_name;
   });

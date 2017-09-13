@@ -1,6 +1,7 @@
 
 #map {
 height: 80%;
+border: 1px;
 }
 
 #municipio {
@@ -17,7 +18,18 @@ padding: 0;
 }
 
 div.wiki {
+padding: 5px;
 font-family: sans-serif;
+font-weight: bold;
 height: 20%;
-background-color: grey;
+background-color: lightgrey;
+}
+
+#informar {
+	font-weight: normal;
+}
+
+#info_plus {
+	font-size: small;
+	font-weight: normal;
 }

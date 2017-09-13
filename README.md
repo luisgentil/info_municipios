@@ -148,7 +148,7 @@ El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra i
 	-Generar función enlace a Wikipedia 		0.5 		 ok 08/09  
 	-Diseñar el PMV: elementos html y css		0.6 		 ok 12/09  
 	-Probar en android vía PhoneGap  			0.7 		 ok 11/09  
-	-Generar función actualización 60 segundos	0.8  
+	-Generar función actualización 60 segundos	0.8.2  
 	-Añadir plugins Cordova, etc.				0.9  
 	-Empaquetar Prototipo 1 					1.0  
 

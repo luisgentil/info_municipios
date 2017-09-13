@@ -12,8 +12,7 @@
     
     <plugin name="cordova-plugin-whitelist" source="npm" spec="~1.2.1" />
     <plugin name="cordova-plugin-file" source="npm" spec="~4.1.1" />
-    <feature name="Geolocation">
-    <param name="android-package" value="org.apache.cordova.GeoBroker" />
+    <plugin name="Geolocation" value="org.apache.cordova.GeoBroker"/>
         
     <platform name="android">    
       <icon src="icon.png" />

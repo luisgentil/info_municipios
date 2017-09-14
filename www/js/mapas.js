@@ -38,19 +38,21 @@ function initMap() {
 //  });
 }
 // 
-var actualizando = setInterval(actualizar, 5000); // este valor debería ser 60000, al menos, 
+var actualizando = setInterval(actualizar, 60000); // este valor debería ser 60000, al menos, 
                                                   // pero lo dejo para test en PhoneGap
 //////////////////////fin del bucle principal, comienza la sección de funciones ///////////////////
 
 // Otras funciones para al App, algunas sirven y otras no XD
 
 
-function actualizar(geocoder) {
+function actualizar(map, geocoder) {
   var d = new Date ();
+  var map = new google.maps.Map(document.getElementById('map'));
+  var geocoder = new google.maps.Geocoder;
+  var infowindow = new google.maps.InfoWindow;
   document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString();
-  localizar(map, geocoder);//esto no va bien
+  localizar(map, geocoder); // esto ahora va, pero creo que no es lo ideal. probar en phone gap
 }
-
 
 
 function handleLocationError(browserHasGeolocation) {

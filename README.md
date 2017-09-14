@@ -56,13 +56,13 @@ Un resultado típico 'results[0]'' será un array de objetos json compuesto por:
 	* 'place_id', propiedad-par.  
 	* 'types', un par valor-array.  
 Con el siguiente código se puede revisar el contenido de todas las respuestas recibidas:  
-          for (j = 0; j < results.length; j++) {  
+`          for (j = 0; j < results.length; j++) {  
             console.log("---" + j + "---");  
             for(var i in results[j].address_components){  
               console.log(results[j].address_components[i]); or .types); // or long_name or others  
             }  
             console.log("---");  
-          }  
+          }  `
  
 
 **Situar la posición del usuario**  
@@ -105,7 +105,7 @@ A través de MediaWiki encuentro esta referencia: **Become a MediaWiki hacker Le
 Según lo leído en https://www.w3schools.com/js/js_json_jsonp.asp, con JSONP se puede superar el problema de los orígenes cruzados ('distintos directorios'), hay que ampliarlo.
 (*'JSONP is a method for sending JSON data without worrying about cross-domain issues. JSONP does not use the XMLHttpRequest object. JSONP uses the "script" tag instead.')
 
-**API de Media Wiki **
+**API de Media Wiki**
 Es posible acceder a cualquier contenido mediante la API de MediaWiki. Por ejemplo, `https://es.wikipedia.org/w/api.php?action=query&titles=Wikipedia:Portada&prop=revisions&rvprop=content&format=json` descarga la página principal de Wikipedia en español.  
 
 Para saltar el CORS, hay que saltar la restricción del origen, permitiendo cualquier origen, añadiendo "&origin=*" en la consulta.  
@@ -122,41 +122,43 @@ Desde el momento en que es posible obtener datos de Wikipedia en XML, resulta in
 
 
 # Fases de ejecución
-##Prototipos  
-Primer Prototipo:  una app que, al hace click, centra el mapa en ese marcador, sitúa un marcador en el mapa, abre una ventana de información que contenga el Municipio del punto donde se hizo click, y un enlace a la página de Wikipedia de ese municipio (sólo enlace).
+## Prototipos  
+**Primer Prototipo**/: una app que, al abrir, localiza la ubicación del usuario y centra el mapa, y abre un marcador con el nombre del municipio en el que está situado. Además, al hacer click, centra el mapa en ese marcador, sitúa un marcador en el mapa, abre una ventana de información que contenga el Municipio del punto donde se hizo click, y un enlace a la página de Wikipedia de ese municipio (sólo enlace). 
 
-Segundo Prototipo:  además, busca el municipio en Wikipedia, e informa si existe la web o no.
+Segundo Prototipo: además, busca el municipio en Wikipedia, e informa si existe la web o no.
 
-Tercer Prototipo:  además, dispone de una función que averigua las secciones que tiene la Wikipedia para ese municipio.
+Tercer Prototipo: además, dispone de una función que averigua las secciones que tiene la Wikipedia para ese municipio.
 
-##PMV  
-El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra información; cuando se pincha un botón, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio, busca información sobre el municipio en Internet, y presenta la lista de secciones de la wikipedia en la ventana de información.  El PMV funciona en escritorio *y en Android*.
+## PMV  
+El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra información; cuando se pincha un botón, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio, busca información sobre el municipio en Internet, y presenta la lista de secciones de la wikipedia en la ventana de información.  El PMV funciona en escritorio *y en Android*.  
 
-	-30/08/2017  
+[Posible derivación: ofrece información de una BD, incluyendo producto típico del pueblo, y busca tiendas que lo vendan en los alrededores de la ubicación actual.]  
+
+	30/08/2017  
 	Fases de trabajo  							versión		terminado  
 	----------------------------------------------------------------------  
 	-Elegir base de código 							0.0 		 ok 31/08  
 	-Separar html, css, js 							0.1 		 ok 31/08  
 	-Definir funciones necesarias:  
-	-Inicial, geolocalizar posición				0.1 		 ok 07/09  
-	-Centrar mapa  								0.2 		 ok 31/08  
-	-Pintar marcador 							0.2 		 ok 04/09  
-	-Abrir InfoWindow 							0.2 		 ok 01/09  
-	-Detección de click en el mapa 				0.2 		 ok 31/08  
-	-Geolocalización inversa 					0.3 		 ok 05/09  
-	-Completar InfoWindow con Municipio 		0.3 		 ok 07/09  
-	-Generar función enlace a Wikipedia 		0.5 		 ok 08/09  
-	-Diseñar el PMV: elementos html y css		0.6 		 ok 12/09  
-	-Probar en android vía PhoneGap  			0.7 		 ok 11/09  
-	-Generar función actualización 60 segundos	0.8.2  
-	-Añadir plugins Cordova, etc.				0.9  
-	-Empaquetar Prototipo 1 					1.0  
+		-Inicial, geolocalizar posición				0.1 		 ok 07/09  
+		-Centrar mapa  								0.2 		 ok 31/08  
+		-Pintar marcador 							0.2 		 ok 04/09  
+		-Abrir InfoWindow 							0.2 		 ok 01/09  
+		-Detección de click en el mapa 				0.2 		 ok 31/08  
+		-Geolocalización inversa 					0.3 		 ok 05/09  
+		-Completar InfoWindow con Municipio 		0.3 		 ok 07/09  
+		-Generar función enlace a Wikipedia 		0.5 		 ok 08/09  
+		-Diseñar el PMV: elementos html y css		0.6 		 ok 12/09  
+		-Probar en android vía PhoneGap  			0.7 		 ok 11/09  
+		-Generar función actualización 60 segundos	0.8 		 ok 12/09  
+		-Añadir plugins Cordova, etc.				0.9 		 ok 13/09  
+		-Empaquetar Prototipo 1 					1.0  
 
-	-Generar función Wikipedia  				1.2  -->  			--> ver abajo
-			-descargar texto								 ok 08/09  
-			-interpretar formato correcto  
-			-extraer (desde triples comillas """)  
-			-extraer (hasta "==")  
+		-Generar función Wikipedia  				1.2  -->  			--> ver abajo  
+				-descargar texto								 ok 08/09  
+				-interpretar formato correcto  
+				-extraer (desde triples comillas """)  
+				-extraer (hasta "==")  
 
 
 Veo dos opciones para descargar información de Wikipedia:

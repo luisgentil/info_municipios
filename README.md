@@ -140,19 +140,19 @@ El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra i
 	-Elegir base de código 							0.0 		 ok 31/08  
 	-Separar html, css, js 							0.1 		 ok 31/08  
 	-Definir funciones necesarias:  
-		-Inicial, geolocalizar posición				0.1 		 ok 07/09  
-		-Centrar mapa  								0.2 		 ok 31/08  
-		-Pintar marcador 							0.2 		 ok 04/09  
-		-Abrir InfoWindow 							0.2 		 ok 01/09  
-		-Detección de click en el mapa 				0.2 		 ok 31/08  
+		-Inicial, geolocalizar posición					0.1 		 ok 07/09  
+		-Centrar mapa  							0.2 		 ok 31/08  
+		-Pintar marcador 						0.2 		 ok 04/09  
+		-Abrir InfoWindow 						0.2 		 ok 01/09  
+		-Detección de click en el mapa 					0.2 		 ok 31/08  
 		-Geolocalización inversa 					0.3 		 ok 05/09  
-		-Completar InfoWindow con Municipio 		0.3 		 ok 07/09  
-		-Generar función enlace a Wikipedia 		0.5 		 ok 08/09  
-		-Diseñar el PMV: elementos html y css		0.6 		 ok 12/09  
-		-Probar en android vía PhoneGap  			0.7 		 ok 11/09  
-		-Generar función actualización 60 segundos	0.8 		 ok 12/09  
-		-Añadir plugins Cordova, etc.				0.9 		 ok 13/09  
-		-Empaquetar Prototipo 1 					1.0  
+		-Completar InfoWindow con Municipio 				0.3 		 ok 07/09  
+		-Generar función enlace a Wikipedia 				0.5 		 ok 08/09  
+		-Diseñar el PMV: elementos html y css				0.6 		 ok 12/09  
+		-Probar en android vía PhoneGap  				0.7 		 ok 11/09  
+		-Generar función actualización 60 segundos			0.8 		 ok 12/09  
+		-Añadir plugins Cordova, etc.					0.9 		 ok 13/09  
+		-Empaquetar Prototipo 1 					1.0  		 ok 18/09  
 
 		-Generar función Wikipedia  				1.2  -->  			--> ver abajo  
 				-descargar texto								 ok 08/09  

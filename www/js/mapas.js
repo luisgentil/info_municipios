@@ -38,7 +38,7 @@ function initMap() {
 //  });
 }
 // 
-var actualizando = setInterval(actualizar, 60000); // este valor debería ser 60000, al menos, 
+var actualizando = setInterval(function() {actualizar(map, geocoder)}, 60000);// este valor debería ser 60000, al menos, 
                                                   // pero lo dejo para test en PhoneGap
 //////////////////////fin del bucle principal, comienza la sección de funciones ///////////////////
 
@@ -47,10 +47,11 @@ var actualizando = setInterval(actualizar, 60000); // este valor debería ser 60
 
 function actualizar(map, geocoder) {
   var d = new Date ();
-  var map = new google.maps.Map(document.getElementById('map'));
-  var geocoder = new google.maps.Geocoder;
-  var infowindow = new google.maps.InfoWindow;
+//  var map = new google.maps.Map(document.getElementById('map'));
+//  var geocoder = new google.maps.Geocoder;
+//  var infowindow = new google.maps.InfoWindow;
   document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString();
+//   
   localizar(map, geocoder); // esto ahora va, pero creo que no es lo ideal. probar en phone gap
 }
 
@@ -76,10 +77,13 @@ function pintarGlobo(latLong, map, info) { // pinta un globo y centra el mapa, s
 function localizar(map, geocoder){  // Encuentra la situación actual del dispositivo
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
+      var oldPos = document.getElementById("init_LatLong").innerText;
       var pos = {lat: position.coords.latitude, lng: position.coords.longitude};
       reverseGeocode(geocoder, pos, map);
       map.setCenter(pos);
-      map.setZoom(12);
+//      map.setZoom(12);
+//
+      document.getElementById("init_LatLong").innerText = pos.value; 
     }, function() {handleLocationError(true)});
   } 
   else {  // Browser doesn't support Geolocation

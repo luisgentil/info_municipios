@@ -114,7 +114,6 @@ Para saltar el CORS, hay que saltar la restricción del origen, permitiendo cual
 En el ejemplo anterior, https://es.wikipedia.org/w/api.php?action=query&titles=Montehermoso&prop=revisions&rvprop=content&format=json&origin=* sí puede ser cargado en un div a partir de la respuesta a esa consulta.  
 
 
-
 **Manejo de XML desde JavaScript**
 [pendiente de buscar y probar]  
 Desde el momento en que es posible obtener datos de Wikipedia en XML, resulta interesante explorar el tratamiento de los datos obtenidos desde JS, para lo que es imprescindible conocer cómo intereactúan JS y XML.  
@@ -124,9 +123,9 @@ Desde el momento en que es posible obtener datos de Wikipedia en XML, resulta in
 
 # Fases de ejecución
 ## Prototipos  
-**Primer Prototipo**/: una app que, al abrir, localiza la ubicación del usuario y centra el mapa, y abre un marcador con el nombre del municipio en el que está situado. Además, al hacer click, centra el mapa en ese marcador, sitúa un marcador en el mapa, abre una ventana de información que contenga el Municipio del punto donde se hizo click, y un enlace a la página de Wikipedia de ese municipio (sólo enlace). 
+**Primer Prototipo**: una app que, al abrir, localiza la ubicación del usuario y centra el mapa, y abre un marcador con el nombre del municipio en el que está situado. Además, al hacer click en un punto del mapa, sitúa un marcador en ese punto, centra el mapa en ese marcador, abre una ventana de información que contenga el Municipio del punto donde se hizo click, y en la ventana de información añade un enlace con la página de Wikipedia de ese municipio (sólo enlace).  
 
-Segundo Prototipo: además, busca el municipio en Wikipedia, e informa si existe la web o no.
+**Segundo Prototipo**: además, busca el municipio en Wikipedia, e informa si existe la web o no en la ventana de información.
 
 Tercer Prototipo: además, dispone de una función que averigua las secciones que tiene la Wikipedia para ese municipio.
 

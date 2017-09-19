@@ -1,4 +1,4 @@
-[PMV](#PMV)
+[PMV](#pmv)
 
 # Historia
 [aquí estará el texto de la historia de esta app]  

@@ -12,8 +12,8 @@ Más información sobre bases de datos en HTML5: https://rolandocaldas.com/html5
 Los códigos usados como base son de las siguientes fuentes:  
 
 
-**Centrar el mapa**
-map.setCenter(pos);  
+**Centrar el mapa**  
+`map.setCenter(pos);`  
 (encontrado en el ejemplo 'Geolocation' de la api de Google Maps)  
 
 
@@ -49,7 +49,7 @@ A ver si lo entendí bien, aquí resumo lo que he ido probando a partir de la in
 Puede responder en JSON o XML, según se indique en la petición. La respuesta de geocoder service es en json.  
 Es decir: la respuesta es un objeto JSON, por lo que aplica lo que escribí en https://github.com/luisgentil/apuntes/blob/master/README.md .  
 Una respuesta JSON contiene dos elementos principales:  
-	* "status" contiene metadatos sobre la solicitud. Propiedad-par. 
+	* "status" contiene metadatos sobre la solicitud. Propiedad-par.  
 	* "results" contiene una matriz (es decir, un array de objetos) de información sobre direcciones geocodificadas e información sobre geometría. Generalmente solo se devuelve una entrada en la matriz "results". Generalmente.  
 Un resultado típico 'results[0]'' será un array de objetos json compuesto por:  
 	* 'address_components', un array [] de objetos, con diversas propiedades-pares.  

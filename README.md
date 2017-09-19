@@ -1,4 +1,4 @@
-Enlace a [planificación PMV](#PMV)
+[PMV](#PMV)
 
 # Historia
 [aquí estará el texto de la historia de esta app]  

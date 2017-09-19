@@ -64,8 +64,8 @@ Con el siguiente código se puede revisar el contenido de todas las respuestas r
               console.log(results[j].address_components[i]); or .types); // or long_name or others  
             }  
             console.log("---");  
-          }  ```
- 
+          }  
+```  
 
 **Situar la posición del usuario**  
 Ubicación geográfica: Mostrar la posición de un usuario o dispositivo en Maps,  

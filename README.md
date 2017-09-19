@@ -1,3 +1,5 @@
+Enlace a [planificación PMV](#PMV)
+
 # Historia
 [aquí estará el texto de la historia de esta app]  
 
@@ -56,13 +58,13 @@ Un resultado típico 'results[0]'' será un array de objetos json compuesto por:
 	* 'place_id', propiedad-par.  
 	* 'types', un par valor-array.  
 Con el siguiente código se puede revisar el contenido de todas las respuestas recibidas:  
-`          for (j = 0; j < results.length; j++) {  
+```          for (j = 0; j < results.length; j++) {  
             console.log("---" + j + "---");  
             for(var i in results[j].address_components){  
               console.log(results[j].address_components[i]); or .types); // or long_name or others  
             }  
             console.log("---");  
-          }  `
+          }  ```
  
 
 **Situar la posición del usuario**  
@@ -113,7 +115,6 @@ En el ejemplo anterior, https://es.wikipedia.org/w/api.php?action=query&titles=M
 
 
 
-
 **Manejo de XML desde JavaScript**
 [pendiente de buscar y probar]  
 Desde el momento en que es posible obtener datos de Wikipedia en XML, resulta interesante explorar el tratamiento de los datos obtenidos desde JS, para lo que es imprescindible conocer cómo intereactúan JS y XML.  
@@ -136,7 +137,7 @@ El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra i
 
 	30/08/2017  
 	Fases de trabajo  							versión		terminado  
-	----------------------------------------------------------------------  
+	----------------------------------------------------------------------------------------------------  
 	-Elegir base de código 							0.0 		 ok 31/08  
 	-Separar html, css, js 							0.1 		 ok 31/08  
 	-Definir funciones necesarias:  
@@ -154,8 +155,8 @@ El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra i
 		-Añadir plugins Cordova, etc.					0.9 		 ok 13/09  
 		-Empaquetar Prototipo 1 					1.0  		 ok 18/09  
 
-		-Generar función Wikipedia  				1.2  -->  			--> ver abajo  
-				-descargar texto								 ok 08/09  
+		-Generar función Wikipedia  					1.2  --> 	--> ver abajo  
+				-descargar texto						 ok 08/09  
 				-interpretar formato correcto  
 				-extraer (desde triples comillas """)  
 				-extraer (hasta "==")  

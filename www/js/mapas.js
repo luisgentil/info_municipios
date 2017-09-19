@@ -1,4 +1,4 @@
-// 1.0.0 ///////////////////// variables globales y otras gaitas////////////////
+// 1.0.1 ///////////////////// variables globales y otras gaitas////////////////
 var initLatLong = {lat: 37.893949, lng: -6.749115};  // coordenadas de inicio ;)37.893949, -6.749115
 var initZoom = 8;                                        //37.419193,-5.991978 estas son las coordenadas de sevilla 
 
@@ -36,12 +36,12 @@ function initMap() {
 //  document.getElementById('submit').addEventListener('click', function() {
 //  geocodeLatLng(geocoder, map, infowindow);
 //  });
-}
+//}
 // 
 var actualizando = setInterval(function() {actualizar(map, geocoder)}, 60000);// este valor debería ser 60000, al menos, 
                                                   // pero lo dejo para test en PhoneGap
+}
 //////////////////////fin del bucle principal, comienza la sección de funciones ///////////////////
-
 // Otras funciones para al App, algunas sirven y otras no XD
 
 
@@ -59,7 +59,6 @@ function actualizar(map, geocoder) {
 function handleLocationError(browserHasGeolocation) {
   console.log("Error de localización");
 }
-
 
 
 function pintarGlobo(latLong, map, info) { // pinta un globo y centra el mapa, si además trae info, abre un cuadro de info

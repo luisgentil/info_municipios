@@ -113,24 +113,36 @@ Es posible acceder a cualquier contenido mediante la API de MediaWiki. Por ejemp
 Para saltar el CORS, hay que saltar la restricción del origen, permitiendo cualquier origen, añadiendo "&origin=*" en la consulta.  
 En el ejemplo anterior, https://es.wikipedia.org/w/api.php?action=query&titles=Montehermoso&prop=revisions&rvprop=content&format=json&origin=* sí puede ser cargado en un div a partir de la respuesta a esa consulta.  
 
+Por otra parte, para la respuesta de esa consulta es un JSON (clave-valor) que incluye los datos de la página (valor) en el campo (clave) '201387' (un número), distinto para cada municipio, es decir: el pageid. Pero éste campo clave cambia con cada página de Wikipedia, así que para reutilizar la búsqueda hay que recorrer las claves del Json, recorriendo todas las claves del objeto, con un loop for "*In a for-in loop, use the bracket notation to access the property values*" https://www.w3schools.com/js/js_json_objects.asp  
+`for (numero in respuesta.query.pages) {(···)}`  
 
 **Manejo de XML desde JavaScript**
 [pendiente de buscar y probar]  
 Desde el momento en que es posible obtener datos de Wikipedia en XML, resulta interesante explorar el tratamiento de los datos obtenidos desde JS, para lo que es imprescindible conocer cómo intereactúan JS y XML.  
 (Json usa el método  XMLHttpRequest para obtener y procesar los datos, así que supongo que también se aplicará aquí)  
 
+**Conversión de datos en JSON**
+En la web "Mr Data Converter", https://shancarter.github.io/mr-data-converter/ , se puede acceder a un conversor online de datos CSV --> JSON. Muy útil para convertir una tabla de datos excel en json, lo que puede servir para recopilar información de municipios.  
+En la web http://jsoneditoronline.org/ se puede visualizar fácilmente el contenido de un copy-paste en formato JSON, como por ejemplo las respuestas de Wikipedia.  
+
+**Fuentes de información para productos típicos**
+Gastronomía de Andalucía - Wikipedia, la enciclopedia libre,  
+Dulces y postres de Andalucía, por municipios: https://www.andalucia.org/es/recetas/tipos/recetas/dulces-y-postres  
+Rutas y platos típicos por provincias de Andalucia: https://haycosasmuynuestras.com/ruta-gastronomica-andalucia/  
 
 
 # Fases de ejecución
 ## Prototipos  
 **Primer Prototipo**: una app que, al abrir, localiza la ubicación del usuario y centra el mapa, y abre un marcador con el nombre del municipio en el que está situado. Además, al hacer click en un punto del mapa, sitúa un marcador en ese punto, centra el mapa en ese marcador, abre una ventana de información que contenga el Municipio del punto donde se hizo click, y en la ventana de información añade un enlace con la página de Wikipedia de ese municipio (sólo enlace).  
 
-**Segundo Prototipo**: además, busca el municipio en Wikipedia, e informa si existe la web o no en la ventana de información.
+**Segundo Prototipo**: además, busca el municipio en Wikipedia, e informa si existe la web o no en la ventana de información.  
 
-Tercer Prototipo: además, dispone de una función que averigua las secciones que tiene la Wikipedia para ese municipio.
+Tercer Prototipo: además, dispone de una función que averigua las secciones que tiene la Wikipedia para ese municipio, y las muestra en la ventana de información.  
+
+Cuarto Prototipo: además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio, o de la provincia, o de la región.  
 
 ## PMV  
-El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra información; cuando se pincha un botón, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio, busca información sobre el municipio en Internet, y presenta la lista de secciones de la wikipedia en la ventana de información.  El PMV funciona en escritorio *y en Android*.  
+El **PMV** dispone de una ventana que muestra el mapa, y una ventana que muestra información;  cuando se inicia, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio y lo muestra en una ventana, busca información sobre el municipio en Internet, y presenta la lista de secciones de la wikipedia en la ventana de información. El PMV funciona en escritorio *y en Android*. 
 
 [Posible derivación: ofrece información de una BD, incluyendo producto típico del pueblo, y busca tiendas que lo vendan en los alrededores de la ubicación actual.]  
 
@@ -154,6 +166,11 @@ El **PMV** dispone de una ventana que muestra el mapa, una ventana que muestra i
 		-Añadir plugins Cordova, etc.					0.9 		 ok 13/09  
 		-Empaquetar Prototipo 1 					1.0  		 ok 18/09  
 
+		-Func. comprobar si existe pueblo en Wikip.			1.1 		 ok 25/09  
+		-Actualizar info enlace en pantalla:				1.2 		 ok 26/09  
+			limpiar, documentar, redacción final			1.3 		 ok 27/09  
+		-Empaquetar Prototipo 2 					2.0 		 ok 27/09  
+		
 		-Generar función Wikipedia  					1.2  --> 	--> ver abajo  
 				-descargar texto						 ok 08/09  
 				-interpretar formato correcto  

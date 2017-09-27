@@ -1,7 +1,7 @@
-// 1.0.1 ///////////////////// variables globales y otras gaitas////////////////
+//2.0.0/////////////////// variables globales y otras gaitas////////////////
 var initLatLong = {lat: 37.893949, lng: -6.749115};  // coordenadas de inicio ;)37.893949, -6.749115
 var initZoom = 8;                                        //37.419193,-5.991978 estas son las coordenadas de sevilla 
-
+  
 //////////////////////// sección o "bucle" principal  ///////////////////
 // el mapa se inicia
 function initMap() {
@@ -10,7 +10,7 @@ function initMap() {
   center: initLatLong       //{lat: 40.731, lng: -73.997}
   });
   
-/*  // Encuentra la situación actual del dispositivo
+  /*  // Encuentra la situación actual del dispositivo
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = {lat: position.coords.latitude, lng: position.coords.longitude};
@@ -33,12 +33,12 @@ function initMap() {
     reverseGeocode(geocoder, e.latLng, map)}); //  mostrarInfo(e.latLng, map, "foo")});
 
   
-//  document.getElementById('submit').addEventListener('click', function() {
-//  geocodeLatLng(geocoder, map, infowindow);
-//  });
-//}
-// 
-var actualizando = setInterval(function() {actualizar(map, geocoder)}, 60000);// este valor debería ser 60000, al menos, 
+  //  document.getElementById('submit').addEventListener('click', function() {
+  //  geocodeLatLng(geocoder, map, infowindow);
+  //  });
+  //}
+  // 
+  var actualizando = setInterval(function() {actualizar(map, geocoder)}, 60000); // este valor debería ser 60000, al menos, 
                                                   // pero lo dejo para test en PhoneGap
 }
 //////////////////////fin del bucle principal, comienza la sección de funciones ///////////////////
@@ -47,11 +47,11 @@ var actualizando = setInterval(function() {actualizar(map, geocoder)}, 60000);//
 
 function actualizar(map, geocoder) {
   var d = new Date ();
-//  var map = new google.maps.Map(document.getElementById('map'));
-//  var geocoder = new google.maps.Geocoder;
-//  var infowindow = new google.maps.InfoWindow;
+  //  var map = new google.maps.Map(document.getElementById('map'));
+  //  var geocoder = new google.maps.Geocoder;
+  //  var infowindow = new google.maps.InfoWindow;
   document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString();
-//   
+  //var nuevaPos = navigator.geolocation.watchPosition(function(){pintarGlobo(initLatLong, map,info)}, function() {handleLocationError(true)});
   localizar(map, geocoder); // esto ahora va, pero creo que no es lo ideal. probar en phone gap
 }
 
@@ -59,6 +59,7 @@ function actualizar(map, geocoder) {
 function handleLocationError(browserHasGeolocation) {
   console.log("Error de localización");
 }
+
 
 
 function pintarGlobo(latLong, map, info) { // pinta un globo y centra el mapa, si además trae info, abre un cuadro de info
@@ -75,13 +76,13 @@ function pintarGlobo(latLong, map, info) { // pinta un globo y centra el mapa, s
 
 function localizar(map, geocoder){  // Encuentra la situación actual del dispositivo
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
+    navigator.geolocation.getCurrentPosition(function(position) { //watchCurrentPosition
       var oldPos = document.getElementById("init_LatLong").innerText;
       var pos = {lat: position.coords.latitude, lng: position.coords.longitude};
       reverseGeocode(geocoder, pos, map);
       map.setCenter(pos);
 //      map.setZoom(12);
-//
+//      if (oldPos === pos) {document.getElementById("informaciones").innerText = "Posición repetida";}
       document.getElementById("init_LatLong").innerText = pos.value; 
     }, function() {handleLocationError(true)});
   } 
@@ -95,28 +96,28 @@ function reverseGeocode(geocoder, latLong, map) { // esto funciona
   geocoder.geocode({'location': latLong, 'language':'es'}, function(results, status) {
       if (status === 'OK') {
         if (results[0]) {
-// con este código, asigna el valor correspondiente al primer campo 'locality' de entre los que encuentre (suele haber varios)
+  // con este código, asigna el valor correspondiente al primer campo 'locality' de entre los que encuentre (suele haber varios)
           var arrayLocalidad = []; // new Array;
-// recorremos todos los resultados obtenidos, normalmente 1 en results[0]
+  // recorremos todos los resultados obtenidos, normalmente 1 en results[0]
           for (j = 0; j < results.length; j++) {
-// recorremos todos los objetos de address_components, normalmente trae varios
+  // recorremos todos los objetos de address_components, normalmente trae varios
             for(var i in results[j].address_components){
-// cuando encuentra un resultado de tipo locality añadimos el long_name al nuevo array
+  // cuando encuentra un resultado de tipo locality añadimos el long_name al nuevo array
               if (results[j].address_components[i].types[0]==="locality"){
                 arrayLocalidad.push(results[j].address_components[i].long_name); 
-//                console.log("j - i: " + j + " , " + i);
-// y salimos del bucle, el resto de address_components ya no interesan
+  //                console.log("j - i: " + j + " , " + i);
+  // y salimos del bucle, el resto de address_components ya no interesan
               break;
             }
-// también hay que salir del bucle principal
+  // también hay que salir del bucle principal
           if (results[j].address_components[i].types[0]==="locality"){ break;}
             }
           }
-// de todos los valores que pueda haber encontrado, elejimos el primero 
+  // de todos los valores que pueda haber encontrado, elejimos el primero 
           var link = '<a href=\"https://es.wikipedia.org/wiki/'+arrayLocalidad[0] +"\""+'>'+arrayLocalidad[0]+ '</a>';
           var info = '<div class="municipio">' + arrayLocalidad[0] + '</div> '; //+ '<a href="https://es.wikipedia.org/wiki/"+arrayLocalidad[0]"+'</a>'; 
-// para comprobar toooodos los resultados en la consola:
-/*          for (j = 0; j < results.length; j++) {
+  // para comprobar toooodos los resultados en la consola:
+ /*          for (j = 0; j < results.length; j++) {
             console.log("---" + j + "---");
             for(var i in results[j].address_components){
               console.log(results[j].address_components[i]);//.long_name);//.types);
@@ -127,13 +128,55 @@ function reverseGeocode(geocoder, latLong, map) { // esto funciona
         else { var info ='No results found';}
        }
       else { var info = 'Geocoder failed due to: ' + status;}
-// con el nombre encontrado llamamos a la función para añadirlo al mapa
+  // con el nombre encontrado llamamos a la función para añadirlo al mapa
      pintarGlobo(latLong, map, info);
-     document.getElementById("informar").innerHTML = link;
-// ¿eliminar la siguiente línea tras el desarrollo?
-//     document.getElementById('floating-panel').innerHTML = results[0].address_components[2].long_name + " /// " + results[1].address_components[2].long_name;
+  // y actualizamos el link en la ventana de información, o no
+    var miPueblo = comprobarEnWiki(arrayLocalidad[0].toString());
+    // si encuentra el pueblo en Wikipedia, ofrece un enlace a esa página
+    if (miPueblo > 0) {
+      document.getElementById("informar").innerHTML = link;}
+    // si no lo encuentra, añade el nombre sin link
+    else {
+      document.getElementById("informar").innerHTML = arrayLocalidad[0].toString();}
+  // ¿eliminar la siguiente línea tras el desarrollo?
+  //     document.getElementById('floating-panel').innerHTML = results[0].address_components[2].long_name + " /// " + results[1].address_components[2].long_name;
   });
 }
+
+
+// Comprobar si existe una página concreta en Wikipedia
+function comprobarEnWiki(pueblo) {
+  //variable que almacenará el resultado
+  var resultado = 0;
+  //variable que hace la conexión, según el ejemplo de Javascript en https://www.w3schools.com/js/js_ajax_http.asp
+  var xmlhttp = new XMLHttpRequest();
+  // cuando obtiene una respuesta ejecuta la function interna
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+      var respuesta = JSON.parse(xmlhttp.responseText);
+      //el valor que nos interesa es el campo clave (clave-valor) de la respuesta, el elemento del JSON 
+      // recorremos los elementos de la respuesta para acceder a la clave
+      for (numero in respuesta.query.pages) {
+      // almacenamos el valor para futuros usos
+        document.getElementById("init_LatLong").innerHTML = numero;
+        // si identifica el municipio el resultado es un nº > 0, corresponde a la página del municipio en Wikipedia (si no tiene, -1)
+       // if (numero > 0) {
+         // console.log(numero);
+          resultado = numero;
+         // console.log("resultado:" + resultado);
+         // return numero;} NOOOO: este return no es de la función comprobarEnWiki, sino de la function() interior, así que no podrá retornar nada la función principal. ¿Cómo saltar esto? la var numero solo exite dentro del for; 
+        }
+    }
+   }
+  
+  
+  var consulta = "https://es.wikipedia.org/w/api.php?action=query&titles=" + pueblo + "&prop=revisions&rvprop=content&format=json&origin=*";
+  xmlhttp.open ("GET", consulta, false); // originalmente 'true', al ponerlo false SÍ funciona como quiero. Pero me da un mensaje de función deprecated, 
+  xmlhttp.send();
+  //console.log("ahora res vale: "+ resultado);
+  return resultado;
+}
+
 
 
 // esta función abre un cuadro de Información en unas coordenadas

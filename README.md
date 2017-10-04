@@ -21,7 +21,7 @@ Los códigos usados como base son de las siguientes fuentes:
 (Esta información corresponde a: nociones generales, y la geocodificación de direcciones estáticas conocidas, a través del servicio web de geocodificación).  
 La geocodificación inversa consiste en obtener información comprensible a partir de latitud + longitud. Hay que tener en cuenta que "el geocodificador inverso a menudo devuelve más de un resultado. Las “direcciones” no representan solo direcciones postales, sino cualquier forma de asignar nombres geográficos a una ubicación. Por ejemplo, al aplicarse geocodificación a un punto en la ciudad de Chicago, dicho punto puede etiquetarse como una dirección, como la ciudad (Chicago), como el estado (Illinois) o como un país (Estados Unidos). Todas las direcciones corresponden al geocodificador. El geocodificador inverso devuelve todos estos resultados.  (...) Las direcciones se devuelven en el orden de mayor a menor coincidencia." 
 Más info: https://developers.google.com/maps/documentation/javascript/geocoding?hl=es-419#ReverseGeocoding  
-
+  
 Una consulta como: http://maps.googleapis.com/maps/api/geocode/json?&latlng=37.419193,-5.991978 ofrece una lista de resultados en formato JSON. Por tanto, accesible vía consultas web, como:  https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY , o **por ejemplo**:  
 https://maps.googleapis.com/maps/api/geocode/json?latlng=37.516311,-5.970018&language=es&result_type=political&key=AIzaSyAr6WjP2-THB-i9F3DaaBkmmB0cUmHb3i0  
 que muestra los resultados en idioma español, y los limita al tipo "political", lo cual simplifica los resultados.  

@@ -1,4 +1,4 @@
-//2.0.0/////////////////// variables globales y otras gaitas////////////////
+//3.0.0/////////////////// variables globales y otras gaitas////////////////
 var initLatLong = {lat: 37.893949, lng: -6.749115};  // coordenadas de inicio ;)37.893949, -6.749115
 var initZoom = 8;                                        //37.419193,-5.991978 estas son las coordenadas de sevilla 
   
@@ -50,7 +50,7 @@ function actualizar(map, geocoder) {
   //  var map = new google.maps.Map(document.getElementById('map'));
   //  var geocoder = new google.maps.Geocoder;
   //  var infowindow = new google.maps.InfoWindow;
-  document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString();
+  document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString(); 
   //var nuevaPos = navigator.geolocation.watchPosition(function(){pintarGlobo(initLatLong, map,info)}, function() {handleLocationError(true)});
   localizar(map, geocoder); // esto ahora va, pero creo que no es lo ideal. probar en phone gap
 }
@@ -77,13 +77,13 @@ function pintarGlobo(latLong, map, info) { // pinta un globo y centra el mapa, s
 function localizar(map, geocoder){  // Encuentra la situación actual del dispositivo
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) { //watchCurrentPosition
-      var oldPos = document.getElementById("init_LatLong").innerText;
-      var pos = {lat: position.coords.latitude, lng: position.coords.longitude};
-      reverseGeocode(geocoder, pos, map);
+      var oldPos = document.getElementById("init_LatLong").innerText;  // debería ser la posición anterior
+      var pos = {lat: position.coords.latitude, lng: position.coords.longitude}; // posición dtectada, en coordenadas
+      reverseGeocode(geocoder, pos, map); //
       map.setCenter(pos);
 //      map.setZoom(12);
 //      if (oldPos === pos) {document.getElementById("informaciones").innerText = "Posición repetida";}
-      document.getElementById("init_LatLong").innerText = pos.value; 
+      document.getElementById("init_LatLong").innerText = pos.value;  // ¿esto cuando se ve??
     }, function() {handleLocationError(true)});
   } 
   else {  // Browser doesn't support Geolocation
@@ -106,14 +106,14 @@ function reverseGeocode(geocoder, latLong, map) { // esto funciona
               if (results[j].address_components[i].types[0]==="locality"){
                 arrayLocalidad.push(results[j].address_components[i].long_name); 
   //                console.log("j - i: " + j + " , " + i);
-  // y salimos del bucle, el resto de address_components ya no interesan
+  // y salimos del bucle, el resto de address_components ya no interesan POR AHORA
               break;
             }
   // también hay que salir del bucle principal
           if (results[j].address_components[i].types[0]==="locality"){ break;}
             }
           }
-  // de todos los valores que pueda haber encontrado, elejimos el primero 
+  // de todos los valores que pueda haber encontrado, elegimos el primero 
           var link = '<a href=\"https://es.wikipedia.org/wiki/'+arrayLocalidad[0] +"\""+'>'+arrayLocalidad[0]+ '</a>';
           var info = '<div class="municipio">' + arrayLocalidad[0] + '</div> '; //+ '<a href="https://es.wikipedia.org/wiki/"+arrayLocalidad[0]"+'</a>'; 
   // para comprobar toooodos los resultados en la consola:
@@ -131,13 +131,14 @@ function reverseGeocode(geocoder, latLong, map) { // esto funciona
   // con el nombre encontrado llamamos a la función para añadirlo al mapa
      pintarGlobo(latLong, map, info);
   // y actualizamos el link en la ventana de información, o no
-    var miPueblo = comprobarEnWiki(arrayLocalidad[0].toString());
+    var miPueblo = comprobarEnWiki(arrayLocalidad[0].toString()); // quizás debería ser una función distinta, en una línea de localizar, después de la linea 82 "reverseGeocode(geocoder, pos, map); "
+//    console.log(miPueblo);
     // si encuentra el pueblo en Wikipedia, ofrece un enlace a esa página
-    if (miPueblo > 0) {
-      document.getElementById("informar").innerHTML = link;}
+    if (miPueblo > 0) { // el link no puede depender de la respuesta, porque si tarda pone undefined y sigue.
+      document.getElementById("info_nombre").innerHTML = link;}
     // si no lo encuentra, añade el nombre sin link
     else {
-      document.getElementById("informar").innerHTML = arrayLocalidad[0].toString();}
+      document.getElementById("info_nombre").innerHTML = arrayLocalidad[0].toString();}
   // ¿eliminar la siguiente línea tras el desarrollo?
   //     document.getElementById('floating-panel').innerHTML = results[0].address_components[2].long_name + " /// " + results[1].address_components[2].long_name;
   });
@@ -146,6 +147,48 @@ function reverseGeocode(geocoder, latLong, map) { // esto funciona
 
 // Comprobar si existe una página concreta en Wikipedia
 function comprobarEnWiki(pueblo) {
+  var numero = 0;
+  var xmlhttp = new XMLHttpRequest();
+  // cuando obtiene una respuesta ejecuta la function interna
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+      var respuesta = JSON.parse(xmlhttp.responseText);
+      if (respuesta.error) {
+        console.log(respuesta.error);
+        document.getElementById("init_LatLong").innerHTML = "-1"; 
+        document.getElementById("info_plus").innerHTML = "no encontrado";}
+      else {
+        console.log("respuesta " + respuesta);
+      var numero = respuesta.parse.pageid;
+      document.getElementById("init_LatLong").innerHTML = numero; //respuesta.parse.pageid;
+      var comienzo = respuesta.parse.text["*"].indexOf('<p><b>'); // \n<p><b> es la mejor opción, <b> mejor que <p>, en algunos casos había errores, con esto se localiza dónde comienza el párrafo de presentación
+      var terminac_destacado = respuesta.parse.text["*"].indexOf('<h2>') - 1;
+      var presentación =respuesta.parse.text["*"].substring(comienzo, terminac_destacado);
+      var terminac_normal = presentación.indexOf('</p>') ;// con <h2> , toda la presentación // con indexOf('h2') localiza dónde comienza el apartado "Índice", que comienza con un h2 que debe ser el primero de la página. '-1' para evitar signo '<'.
+      var primer_parrafo =presentación.substring(0, terminac_normal);
+      
+      // el texto de presentación COMPLETO es el contenido entre el primer indexOf y el segundo indexOf; el PRIMER PÁRRAFO es el texto hasta </p>, salvo en artículos destacados, que tienen introducción y lían la cosa. Una solución más general: seleccionar toda la introducción, mediante comienzo-terminac_destacado, que da el mismo resultado en todos los casos (pueblos y destacados); sobre esta selección, hacer una segunda selección buscando </p>, que ahora sí será mayor que comienzo en todos los casos. El primer párrafo será siempre entre comienzo y terminac_normal.  
+      document.getElementById("info_plus").innerHTML = primer_parrafo;
+          }// antes era aqui
+      // secciones y links ////
+      var link = 'href=\"https://es.wikipedia.org/wiki/'+pueblo +'#';
+      for (x in respuesta.parse.sections){
+        var sectionLink = link + respuesta.parse.sections[x].line;
+        sectionLink = sectionLink.replace(/\s/g,"_");
+        document.getElementById("info_plus").innerHTML += '<a '+ sectionLink +"\"" + ">" + respuesta.parse.sections[x].line + "</a>" + " - "}; //así se crea una lista de secciones con links --- 
+     } //y aqui
+    }// y aqui
+  var consulta = "https://es.wikipedia.org/w/api.php?action=parse&page="+ pueblo +"&format=json&origin=*";
+  xmlhttp.open ("GET", consulta, false); // ahora sí funciona con true // originalmente 'true', al ponerlo false SÍ funciona como quiero. Pero me da un mensaje de función deprecated, 
+  xmlhttp.send();
+  numero = document.getElementById("init_LatLong").innerHTML; // si la consulta es "false" sí muestra el valor correcto, así que lo pongo en false
+  console.log("numero:" + numero);
+  return numero;
+}
+
+
+//=========================== VERSIÓN ANTIGUA - ANTERIOR QUE FUNCIONABA EN PROTO 2 ====================
+/*function comprobarEnWiki(pueblo) {
   //variable que almacenará el resultado
   var resultado = 0;
   //variable que hace la conexión, según el ejemplo de Javascript en https://www.w3schools.com/js/js_ajax_http.asp
@@ -176,8 +219,8 @@ function comprobarEnWiki(pueblo) {
   //console.log("ahora res vale: "+ resultado);
   return resultado;
 }
-
-
+//===================================///////////////////////==========================================
+*/
 
 // esta función abre un cuadro de Información en unas coordenadas
 function mostrarInfo(latLong, map, info) { 

@@ -12,7 +12,7 @@ Más información sobre bases de datos en HTML5: https://rolandocaldas.com/html5
 Los códigos usados como base son de las siguientes fuentes:  
 
 
-**Centrar el mapa**
+**Centrar el mapa**  
 `map.setCenter(pos);`  
 (encontrado en el ejemplo 'Geolocation' de la api de Google Maps)  
 
@@ -21,7 +21,7 @@ Los códigos usados como base son de las siguientes fuentes:
 (Esta información corresponde a: nociones generales, y la geocodificación de direcciones estáticas conocidas, a través del servicio web de geocodificación).  
 La geocodificación inversa consiste en obtener información comprensible a partir de latitud + longitud. Hay que tener en cuenta que "el geocodificador inverso a menudo devuelve más de un resultado. Las “direcciones” no representan solo direcciones postales, sino cualquier forma de asignar nombres geográficos a una ubicación. Por ejemplo, al aplicarse geocodificación a un punto en la ciudad de Chicago, dicho punto puede etiquetarse como una dirección, como la ciudad (Chicago), como el estado (Illinois) o como un país (Estados Unidos). Todas las direcciones corresponden al geocodificador. El geocodificador inverso devuelve todos estos resultados.  (...) Las direcciones se devuelven en el orden de mayor a menor coincidencia." 
 Más info: https://developers.google.com/maps/documentation/javascript/geocoding?hl=es-419#ReverseGeocoding  
-  
+    
 Una consulta como: http://maps.googleapis.com/maps/api/geocode/json?&latlng=37.419193,-5.991978 ofrece una lista de resultados en formato JSON. Por tanto, accesible vía consultas web, como:  https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY , o **por ejemplo**:  
 https://maps.googleapis.com/maps/api/geocode/json?latlng=37.516311,-5.970018&language=es&result_type=political&key=AIzaSyAr6WjP2-THB-i9F3DaaBkmmB0cUmHb3i0  
 que muestra los resultados en idioma español, y los limita al tipo "political", lo cual simplifica los resultados.  
@@ -177,6 +177,42 @@ Gastronomía de Andalucía - Wikipedia, la enciclopedia libre,
 Dulces y postres de Andalucía, por municipios: https://www.andalucia.org/es/recetas/tipos/recetas/dulces-y-postres  
 Rutas y platos típicos por provincias de Andalucia: https://haycosasmuynuestras.com/ruta-gastronomica-andalucia/  
 
+**Firebase**  
+Firebase es muchas cosas, pero yo me quedo con "una base de datos online".  
+Planteo almacenar en Firebase datos típicos de cada municipio, que pueda consultar cuando la app esté en ese municipio.  
+La fuente de información más práctica que he encontrado: https://desarrolloweb.com/articulos/introduccion-firebase-backend-nube.html  
+Hay mucha información y ejemplos acerca de cómo grabar datos, y poco sobre cómo leerlos (en mi ignorancia).  
+Por lo que he entendido: no hay que leer, sino suscribirse a los cambios del valor. Es decir, podemos tener actualizados los datos mediante la conexión que hace (y mantiene) Firebase. Así que para leer, con el valor inicial es suficiente.  
+El código en el html: `<script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>`
+Y el script, algo así:
+```javascript
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "**************",
+    authDomain: "*******.firebaseapp.com",
+    databaseURL: "https://*******.firebaseio.com",
+    projectId: "infotown-****",
+    storageBucket: "infotown-****.appspot.com",
+    messagingSenderId: "*********"
+  };
+  firebase.initializeApp(config);
+
+    var databaseService = firebase.database();
+
+    function buscarFirebase(pueblo) {
+            var ref = databaseService.ref('municipios');
+            ref.child(pueblo.toLowerCase()).on("value", function(snapshot){
+              resultado = (snapshot.val() || "");
+      document.getElementById("titular").textContent = resultado;
+        });
+    }
+  </script>
+```
+La idea es: crear un ref de municipios, y si la respuesta es vacía (o null), buscar en un ref de provincias, y si la respuesta es null, en un ref de comunidades autónomas.  
+Al localizar el pueblo, no sólo hay que recuperar el municipio, también necesitaremos recuperar la provincia y la comunidad.  
+Teniendo ya los datos por REVERSEGEOCODER, creo que es mejor aprovecharlos.  
+
 
 # Fases de ejecución  
 ## Prototipos  
@@ -184,11 +220,11 @@ Rutas y platos típicos por provincias de Andalucia: https://haycosasmuynuestras
 
 Segundo Prototipo: además, busca el municipio en Wikipedia, e informa si existe la web o no en la ventana de información.  
 
-**Tercer Prototipo**: además, extrae el primer párrafo de la presentación en Wikipedia, y dispone de una función que averigua las secciones que tiene la Wikipedia para ese municipio, y las muestra en la ventana de información.  
+Tercer Prototipo: además, extrae el primer párrafo de la presentación en Wikipedia, y dispone de una función que averigua las secciones que tiene la Wikipedia para ese municipio, y las muestra en la ventana de información.  
 
-Cuarto Prototipo: incorpora una función que añade información sobre algún producto típico del municipio a partir de una Base de Datos; si no, típico de la provincia, o de la CCAA.
+**Cuarto Prototipo**: incorpora una función que añade información sobre algún producto típico del municipio a partir de una Base de Datos {(desechado: '*si no, típico de la provincia, o de la CCAA.*'}  
 
-Quinto Prototipo: además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio, o de la provincia, o de la región.  
+Quinto Prototipo: además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio {desechado *, o de la provincia, o de la región*}. {o **pasteles**, mientras no tengamos una lista más completa}.  
 
 ## PMV  
 El **PMV** dispone de una ventana que muestra el mapa, y una ventana que muestra información; cuando se inicia, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio y lo muestra en una ventana, busca información sobre el municipio en Internet, incluyendo algún producto típico, y presenta la lista de secciones de la wikipedia en la ventana de información. Además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio, o de la provincia, o de la región. 
@@ -222,15 +258,24 @@ El PMV funciona en escritorio *y en Android*.
 		-Empaquetar Prototipo 2 				2.0 		 ok 27/09  
 
 		-Generar función Wikipedia  				2.1  -->  	--> ver abajo  
-				-descargar texto								 ok 08/09  
-				-averigua secciones wikipedia 					 ok 28/09  
+				-descargar texto					 ok 08/09  
+				-averigua secciones wikipedia 				 ok 28/09  
 				-averiguar código nº			2.2 		 ok 29/09  
 				-extraer primer párrafo			2.3 		 ok 02/10  
 				-presenta 1º párrafo y secciones 	2.4 		 ok 03/10  
 					bug: links con espacios		2.4.1  		 ok 03/10  
 					bug: link a wiki de pueblos que	  
 					no tienen wiki (Torrepalma)	2.4.2 		 ok 04/10  
-		Empaquetar prototipo 3 					3.0 		 ok 04/10    
+		Empaquetar prototipo 3 					3.0 		 ok 04/10  
+		
+		-FireBase con datos de municipios			3.1 		 ok 05/10  
+		-Función para conectar con FireBase 			3.1 		 ok 06/10  
+		-Modificar maps.js para obtener prov y CCAA 		3.1 		 ok 06/10  
+		-Función para recuperar respuestas 			3.2		 ok 10/10  
+			- para municipios  				3.2 		 ok 09/10  
+			- para provincias				3.2 		 desechado  
+			- para CCAA 					3.2 		 desechado  
+		Empaquetar prototipo 4 					4.0 		 ok 10/10    
 
 
 
@@ -259,5 +304,5 @@ el valor de miPueblo es undefined cuando se actualiza por tiempo, y por eso no a
 en cambio, al pinchar en un punto del mapa, el valor es numérico, y por eso añade el link en Torrepalma.  
 debe ser un problema de arrastrar un valor anterior, cuando se pincha varias veces sí es undefined, o missing title, y no añade el link.  
 el problema está en la función actualizar, creo, porque el valor en la consola es undefined, después de actualizar.  
-Se resuelve si la consulta es de tipo `false` y no `true`.  
+Paso. Añado siempre el link, funcione o no (estos serán muy muy pocos casos).   
 

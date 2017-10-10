@@ -1,7 +1,19 @@
-//3.0.0/////////////////// variables globales y otras gaitas////////////////
+//4.0.0/////////////////// variables globales y otras gaitas////////////////
 var initLatLong = {lat: 37.893949, lng: -6.749115};  // coordenadas de inicio ;)37.893949, -6.749115
 var initZoom = 8;                                        //37.419193,-5.991978 estas son las coordenadas de sevilla 
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAqrQVTMQnXBnAtVVnk8HPP11_FG8mqWd4",
+    authDomain: "infotown-dc51c.firebaseapp.com",
+    databaseURL: "https://infotown-dc51c.firebaseio.com",
+    projectId: "infotown-dc51c",
+    storageBucket: "infotown-dc51c.appspot.com",
+    messagingSenderId: "96620650895"
+  };
+  firebase.initializeApp(config);
+    var databaseService = firebase.database();
   
+
 //////////////////////// sección o "bucle" principal  ///////////////////
 // el mapa se inicia
 function initMap() {
@@ -44,7 +56,6 @@ function initMap() {
 //////////////////////fin del bucle principal, comienza la sección de funciones ///////////////////
 // Otras funciones para al App, algunas sirven y otras no XD
 
-
 function actualizar(map, geocoder) {
   var d = new Date ();
   //  var map = new google.maps.Map(document.getElementById('map'));
@@ -62,15 +73,15 @@ function handleLocationError(browserHasGeolocation) {
 
 
 
-function pintarGlobo(latLong, map, info) { // pinta un globo y centra el mapa, si además trae info, abre un cuadro de info
-      var infowindow = new google.maps.InfoWindow;
-      var marker = new google.maps.Marker({
-        position: latLong,
-             map: map
-        });
-      map.setCenter(latLong);
-      infowindow.setContent(info);
-      infowindow.open(map, marker);
+function pintarGlobo(latLong, map, info) { // pinta un globo (marker) y centra el mapa, si además trae info, abre un cuadro de info
+  var infowindow = new google.maps.InfoWindow;
+  var marker = new google.maps.Marker({
+    position: latLong,
+         map: map
+    });
+  map.setCenter(latLong);
+  infowindow.setContent(info);
+  infowindow.open(map, marker);
 }
 
 
@@ -98,24 +109,37 @@ function reverseGeocode(geocoder, latLong, map) { // esto funciona
         if (results[0]) {
   // con este código, asigna el valor correspondiente al primer campo 'locality' de entre los que encuentre (suele haber varios)
           var arrayLocalidad = []; // new Array;
+          var arrayProvincia = []; 
+          var arrayComunidad = [];
   // recorremos todos los resultados obtenidos, normalmente 1 en results[0]
           for (j = 0; j < results.length; j++) {
   // recorremos todos los objetos de address_components, normalmente trae varios
             for(var i in results[j].address_components){
+                if (results[j].address_components[i].types[0]==="administrative_area_level_1"){
+                arrayComunidad.push(results[j].address_components[i].long_name); 
+                break;
+              }
+                if (results[j].address_components[i].types[0]==="administrative_area_level_2"){
+                arrayProvincia.push(results[j].address_components[i].long_name); 
+              }
   // cuando encuentra un resultado de tipo locality añadimos el long_name al nuevo array
               if (results[j].address_components[i].types[0]==="locality"){
                 arrayLocalidad.push(results[j].address_components[i].long_name); 
   //                console.log("j - i: " + j + " , " + i);
   // y salimos del bucle, el resto de address_components ya no interesan POR AHORA
-              break;
+  // como locality está antes que administrative_area_level_2/1, voy a usar este último como criterio break
+  // por eso comento el siguiente break, que era la versión antigua
+  //            break;
             }
   // también hay que salir del bucle principal
-          if (results[j].address_components[i].types[0]==="locality"){ break;}
+          if (results[j].address_components[i].types[0]==="administrative_area_level_1"){ break;}
             }
           }
   // de todos los valores que pueda haber encontrado, elegimos el primero 
           var link = '<a href=\"https://es.wikipedia.org/wiki/'+arrayLocalidad[0] +"\""+'>'+arrayLocalidad[0]+ '</a>';
           var info = '<div class="municipio">' + arrayLocalidad[0] + '</div> '; //+ '<a href="https://es.wikipedia.org/wiki/"+arrayLocalidad[0]"+'</a>'; 
+          var provincia = arrayProvincia[0];
+          var comunidad = arrayComunidad[0];
   // para comprobar toooodos los resultados en la consola:
  /*          for (j = 0; j < results.length; j++) {
             console.log("---" + j + "---");
@@ -131,22 +155,23 @@ function reverseGeocode(geocoder, latLong, map) { // esto funciona
   // con el nombre encontrado llamamos a la función para añadirlo al mapa
      pintarGlobo(latLong, map, info);
   // y actualizamos el link en la ventana de información, o no
-    var miPueblo = comprobarEnWiki(arrayLocalidad[0].toString()); // quizás debería ser una función distinta, en una línea de localizar, después de la linea 82 "reverseGeocode(geocoder, pos, map); "
+    var miPueblo = comprobarEnWiki(arrayLocalidad[0].toString(), provincia); // quizás debería ser una función distinta, en una línea de localizar, después de la linea 82 "reverseGeocode(geocoder, pos, map); " el resultado es un número
 //    console.log(miPueblo);
     // si encuentra el pueblo en Wikipedia, ofrece un enlace a esa página
     if (miPueblo > 0) { // el link no puede depender de la respuesta, porque si tarda pone undefined y sigue.
-      document.getElementById("info_nombre").innerHTML = link;}
+      document.getElementById("info_nombre").innerHTML = link + " - " + provincia+ " - " + comunidad;}
     // si no lo encuentra, añade el nombre sin link
     else {
       document.getElementById("info_nombre").innerHTML = arrayLocalidad[0].toString();}
   // ¿eliminar la siguiente línea tras el desarrollo?
   //     document.getElementById('floating-panel').innerHTML = results[0].address_components[2].long_name + " /// " + results[1].address_components[2].long_name;
+    buscarFirebase("municipios", arrayLocalidad[0].toString());
   });
 }
 
 
 // Comprobar si existe una página concreta en Wikipedia
-function comprobarEnWiki(pueblo) {
+function comprobarEnWiki(pueblo, provincia) {
   var numero = 0;
   var xmlhttp = new XMLHttpRequest();
   // cuando obtiene una respuesta ejecuta la function interna
@@ -158,7 +183,7 @@ function comprobarEnWiki(pueblo) {
         document.getElementById("init_LatLong").innerHTML = "-1"; 
         document.getElementById("info_plus").innerHTML = "no encontrado";}
       else {
-        console.log("respuesta " + respuesta);
+    //    console.log("respuesta " + respuesta);
       var numero = respuesta.parse.pageid;
       document.getElementById("init_LatLong").innerHTML = numero; //respuesta.parse.pageid;
       var comienzo = respuesta.parse.text["*"].indexOf('<p><b>'); // \n<p><b> es la mejor opción, <b> mejor que <p>, en algunos casos había errores, con esto se localiza dónde comienza el párrafo de presentación
@@ -179,6 +204,8 @@ function comprobarEnWiki(pueblo) {
      } //y aqui
     }// y aqui
   var consulta = "https://es.wikipedia.org/w/api.php?action=parse&page="+ pueblo +"&format=json&origin=*";
+  //los pueblos como Estepa no ofrecen resultados, porque son nombres ambiguos. Habría que usar una consulta como la linea siguiente, pero esa no funciona con los pueblos normales, ya que no redirige a la página correcta (no desde la api, sí desde la web). Una posible vía de solución: si en la respuesta aparece la palabra "desambiguación", aplicar la siguiente consulta (pueblo + _(provincia)).
+  //var consulta = "https://es.wikipedia.org/w/api.php?action=parse&page="+ pueblo + "_("+ provincia + ")"+"&format=json&origin=*";
   xmlhttp.open ("GET", consulta, false); // ahora sí funciona con true // originalmente 'true', al ponerlo false SÍ funciona como quiero. Pero me da un mensaje de función deprecated, 
   xmlhttp.send();
   numero = document.getElementById("init_LatLong").innerHTML; // si la consulta es "false" sí muestra el valor correcto, así que lo pongo en false
@@ -186,6 +213,13 @@ function comprobarEnWiki(pueblo) {
   return numero;
 }
 
+  // Encontrar datos del municipio, ¿o PR, o CCAA, en FireBase? ¿una función o dos?
+  function buscarFirebase(ambito, pueblo) {
+   var ref = databaseService.ref(ambito);
+   ref.child(pueblo.toLowerCase()).on("value", function(snapshot){resultado = (snapshot.val() || "(sin datos)");
+    document.getElementById("productoTipico").textContent = "Productos típicos: " + pueblo + ", " + resultado;
+  });
+  }
 
 //=========================== VERSIÓN ANTIGUA - ANTERIOR QUE FUNCIONABA EN PROTO 2 ====================
 /*function comprobarEnWiki(pueblo) {

@@ -3,11 +3,12 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <meta version="3.0.0">
+    <meta version="4.0.0">
     <title>[CHANGE] Info Town</title>
     <link rel="stylesheet" type="text/css" href="css/mapas.css" />
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
     <script type="text/javascript" src="js/mapas.js" ></script>
-        <script async defer
+    <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAr6WjP2-THB-i9F3DaaBkmmB0cUmHb3i0&callback=initMap">
     </script>
   </head>
@@ -20,6 +21,7 @@
     <div id="map"></div>
     <div id="informaciones" class="wiki">Información desde Wikipedia
     <div id="info_nombre" >lugar</div>
+    <div id="productoTipico">producto Tipico</div>
     <div id="info_plus">-información ampliada-</div>
     <div id="init_LatLong">lat-long</div>
     </div>

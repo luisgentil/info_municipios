@@ -34,3 +34,7 @@ background-color: white;
 	font-weight: normal;
 }
 
+#init_LatLong {
+	visibility: hidden;
+}
+

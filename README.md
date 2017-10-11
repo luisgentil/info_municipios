@@ -278,6 +278,12 @@ El PMV funciona en escritorio *y en Android*.
 			- para CCAA 					3.2 		 desechado  
 		Empaquetar prototipo 4 					4.0 		 ok 10/10    
 
+		Función para búsqueda en G Places			4.1 		  
+		iconos diferenciados						  
+		¿siempre, o sólo si pulsa botón/link?		  
+		la función elimina los marcadores anteriores	  
+		Empaquetar prototipo 5 					5.0 		  
+
 
 
 Veo dos opciones para descargar información de Wikipedia:
@@ -303,7 +309,7 @@ Ahora parece más lógico produndizar en el tratamiento del json,
 El caso de pueblos que, como resultado de la consulta, ofrece información de la complementaria (lateral), no de la página principal.  
 ## Bug 2: pueblos con wiki ambigua
 Los municipios como: Estepa, y otros, tienen un nombre ambiguo, por lo que la información que descarga es la de la página de desambiguación, no la del pueblo.
-## bug 1: pueblos sin Wiki
+## Bug 1: pueblos sin Wiki
 link a wiki de pueblos que no tienen wiki (Torrepalma)	2.4.2
 documentando la resolución  
 el valor de miPueblo es undefined cuando se actualiza por tiempo, y por eso no añade el link.  

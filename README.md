@@ -1,4 +1,5 @@
 [PMV](#pmv)
+[Bugs pendientes](#bugs_pendientes)
 
 # Historia
 [aquí estará el texto de la historia de esta app]  
@@ -297,7 +298,12 @@ Desventajas 			1ª opción: 											2ª opción:
 El planteamiento anterior es antiguo, de principios de septiembre, cuando aún no sabía manejar la respuesta de Wikipedia en formato JSON.  
 Ahora parece más lógico produndizar en el tratamiento del json, 
 
-##bug: link a wiki de pueblos que no tienen wiki (Torrepalma)	2.4.2
+## Bugs pendientes
+# Bug 2: pueblos con wiki ambigua
+Los municipios como: Estepa, Zalamea la Real, y otros, tienen un nombre ambiguo, por lo que la información que descarga es la de la página de desambiguación, no la del pueblo.
+
+# bug 1: pueblos sin Wiki
+link a wiki de pueblos que no tienen wiki (Torrepalma)	2.4.2
 documentando la resolución  
 el valor de miPueblo es undefined cuando se actualiza por tiempo, y por eso no añade el link.  
 ¿qué debería valer?  

@@ -216,18 +216,18 @@ Teniendo ya los datos por REVERSEGEOCODER, creo que es mejor aprovecharlos.
 
 # Fases de ejecución  
 ## Prototipos  
-**Primer Prototipo**: una app que, al abrir, localiza la ubicación del usuario y centra el mapa, y abre un marcador con el nombre del municipio en el que está situado. Además, al hacer click en un punto del mapa, sitúa un marcador en ese punto, centra el mapa en ese marcador, abre una ventana de información que contenga el Municipio del punto donde se hizo click, y en la ventana de información añade un enlace con la página de Wikipedia de ese municipio (sólo enlace).  
+Primer Prototipo: una app que, al abrir, localiza la ubicación del usuario y centra el mapa, y abre un marcador con el nombre del municipio en el que está situado. Además, al hacer click en un punto del mapa, sitúa un marcador en ese punto, centra el mapa en ese marcador, abre una ventana de información que contenga el Municipio del punto donde se hizo click, y en la ventana de información añade un enlace con la página de Wikipedia de ese municipio (sólo enlace).  
 
 Segundo Prototipo: además, busca el municipio en Wikipedia, e informa si existe la web o no en la ventana de información.  
 
 Tercer Prototipo: además, extrae el primer párrafo de la presentación en Wikipedia, y dispone de una función que averigua las secciones que tiene la Wikipedia para ese municipio, y las muestra en la ventana de información.  
 
-**Cuarto Prototipo**: incorpora una función que añade información sobre algún producto típico del municipio a partir de una Base de Datos {(desechado: '*si no, típico de la provincia, o de la CCAA.*'}  
+Cuarto Prototipo: incorpora una función que añade información sobre algún producto típico del municipio a partir de una Base de Datos {(desechado: '*~~si no, típico de la provincia, o de la CCAA.~~*'}  
 
-Quinto Prototipo: además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio {desechado *, o de la provincia, o de la región*}. {o **pasteles**, mientras no tengamos una lista más completa}.  
+**Quinto Prototipo**: además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio {desechado *~~, o de la provincia, o de la región~~*}. {o **pasteles**, mientras no tengamos una lista más completa}.  
 
 ## PMV  
-El **PMV** dispone de una ventana que muestra el mapa, y una ventana que muestra información; cuando se inicia, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio y lo muestra en una ventana, busca información sobre el municipio en Internet, incluyendo algún producto típico, y presenta la lista de secciones de la wikipedia en la ventana de información. Además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio, o de la provincia, o de la región. 
+El **PMV** dispone de una ventana que muestra el mapa, y una ventana que muestra información; cuando se inicia, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio y lo muestra en una ventana, busca información sobre el municipio en Internet, incluyendo algún producto típico, y presenta la lista de secciones de la Wikipedia en la ventana de información. Además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio, o de la provincia, o de la región. 
 El PMV funciona en escritorio *y en Android*.  
 
 [Posible derivación: ofrece información de una BD, incluyendo producto típico del pueblo, y busca tiendas que lo vendan en los alrededores de la ubicación actual.]  

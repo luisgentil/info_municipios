@@ -1,5 +1,5 @@
 [PMV](#pmv)  
-[Bugs pendientes](#bugs_pendientes)  
+[Bugs pendientes](#bugs-pendientes)  
 
 # Historia
 [aquí estará el texto de la historia de esta app]  

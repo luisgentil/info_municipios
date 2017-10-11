@@ -57,11 +57,11 @@ function initMap() {
 // Otras funciones para al App, algunas sirven y otras no XD
 
 function actualizar(map, geocoder) {
-  var d = new Date ();
+  //var d = new Date ();// sólo sirve en desarrollo
   //  var map = new google.maps.Map(document.getElementById('map'));
   //  var geocoder = new google.maps.Geocoder;
   //  var infowindow = new google.maps.InfoWindow;
-  document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString(); 
+  //document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString(); 
   //var nuevaPos = navigator.geolocation.watchPosition(function(){pintarGlobo(initLatLong, map,info)}, function() {handleLocationError(true)});
   localizar(map, geocoder); // esto ahora va, pero creo que no es lo ideal. probar en phone gap
 }

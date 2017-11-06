@@ -184,6 +184,7 @@ Planteo almacenar en Firebase datos típicos de cada municipio, que pueda consul
 La fuente de información más práctica que he encontrado: https://desarrolloweb.com/articulos/introduccion-firebase-backend-nube.html  
 Hay mucha información y ejemplos acerca de cómo grabar datos, y poco sobre cómo leerlos (en mi ignorancia).  
 Por lo que he entendido: no hay que leer, sino suscribirse a los cambios del valor. Es decir, podemos tener actualizados los datos mediante la conexión que hace (y mantiene) Firebase. Así que para leer, con el valor inicial es suficiente.  
+El código de búsqueda / lectura:  
 El código en el html: `<script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>`
 Y el script, algo así:
 ```javascript
@@ -210,10 +211,32 @@ Y el script, algo así:
     }
   </script>
 ```
-La idea es: crear un ref de municipios, y si la respuesta es vacía (o null), buscar en un ref de provincias, y si la respuesta es null, en un ref de comunidades autónomas.  
+Ha sido más sencillo cargar una lista inicial de todos los municipios, donde se ha incluido un producto genérico para aquellos que no tenían producto típico; mucho mejor que generar 2 ó 3 consultas, condicionales por si la respuesta es null, y líos varios. Una consulta, una respuesta (específica o genérica).  
+DESECHADA {La idea es: crear un ref de municipios, y si la respuesta es vacía (o null), buscar en un ref de provincias, y si la respuesta es null, en un ref de comunidades autónomas.  
 Al localizar el pueblo, no sólo hay que recuperar el municipio, también necesitaremos recuperar la provincia y la comunidad.  
-Teniendo ya los datos por REVERSEGEOCODER, creo que es mejor aprovecharlos.  
+Teniendo ya los datos por REVERSEGEOCODER, creo que es mejor aprovecharlos.}  
 
+En FireBase hay otro concepto interesante, el de las 'promesas'. Simplificando: se hace el intento de grabar, y se ofrecen dos opciones, una por si hay éxito y otra si hay error. Así, en la consola (y en pantalla) se obtiene feedback del proceso.  
+He creado un archivo muy simple para actualizar la base de datos de municipios, tanto pueblo-a-pueblo como con un listado grande (se llama 'index-grabando.html'). La función de grabación, con uso de promises:  
+```javascript
+<script>
+        function grabarListadoFirebase() {
+            var referencia = databaseService.ref('municipios');
+    // escribo en esa referencia
+   referencia.update(lista);
+        // realizo uso de las promesas
+    console.log(lista);
+    referencia.update(lista)
+            .then(function() {
+                console.log('lista almacenada correctamente');
+                document.getElementById("resultado").textContent = "correcto";
+            })
+            .catch(function(error) {
+                console.log('detectado un error', error);
+            });
+    }
+</script>
+```
 
 # Fases de ejecución  
 ## Prototipos  
@@ -278,11 +301,11 @@ El PMV funciona en escritorio *y en Android*.
 			- para CCAA 					3.2 		 desechado  
 		Empaquetar prototipo 4 					4.0 		 ok 10/10    
 
-		Función para búsqueda en G Places			4.1 		  
-		iconos diferenciados						  
-		¿siempre, o sólo si pulsa botón/link?		  
-		la función elimina los marcadores anteriores	  
-		Empaquetar prototipo 5 					5.0 		  
+		Función para búsqueda en G Places			4.1 		 ok 20/10   
+		iconos diferenciados						  	 ok 23/10  
+		¿siempre, o sólo si pulsa botón/link?		  			 no  
+		la función elimina los marcadores anteriores	  			 no  
+		Empaquetar prototipo 5 					5.0 		 ok 06/11   
 
 
 
@@ -307,15 +330,23 @@ Ahora parece más lógico produndizar en el tratamiento del json,
 # Bugs pendientes
 ## Bug 3: pueblos como Zalamea la Real  
 El caso de pueblos que, como resultado de la consulta, ofrece información de la complementaria (lateral), no de la página principal.  
-## Bug 2: pueblos con wiki ambigua
-Los municipios como: Estepa, y otros, tienen un nombre ambiguo, por lo que la información que descarga es la de la página de desambiguación, no la del pueblo.
-## Bug 1: pueblos sin Wiki
-link a wiki de pueblos que no tienen wiki (Torrepalma)	2.4.2
-documentando la resolución  
+En este caso, el problema se debe a que el término buscado `(<p><b>)`, no existe en el texto. En este caso, incluye un `<br>` entre ambas etiquetas.  
+Si se cambia a otra, como por ejemplo `<b>`, habría problemas en otras ciudades como Sevilla.  
+Se me ocurre: habría que localizar el texto `<b>Municipio</b>`.  
+HACER PRUEBAS  
+
+
+## Bug 2: pueblos con wiki ambigua  
+Los municipios como: Estepa, Zalamea la Real, y otros, tienen un nombre ambiguo, por lo que la información que descarga es la de la página de desambiguación, no la del pueblo.  
+Habría que usar una consulta como la linea siguiente, pero esa no funciona con los pueblos normales, ya que no redirige a la página correcta (no desde la api, sí desde la web). Una posible vía de solución: si en la respuesta aparece la palabra "desambiguación", aplicar la siguiente consulta (pueblo + _(provincia)).  
+//var consulta = "https://es.wikipedia.org/w/api.php?action=parse&page="+ pueblo + "_("+ provincia + ")"+"&format=json&origin=*";  
+
+## Bug 1: pueblos sin Wiki  
+link a wiki de pueblos que no tienen wiki (Torrepalma) 2.4.2 documentando la resolución  
 el valor de miPueblo es undefined cuando se actualiza por tiempo, y por eso no añade el link.  
 ¿qué debería valer?  
 en cambio, al pinchar en un punto del mapa, el valor es numérico, y por eso añade el link en Torrepalma.  
 debe ser un problema de arrastrar un valor anterior, cuando se pincha varias veces sí es undefined, o missing title, y no añade el link.  
 el problema está en la función actualizar, creo, porque el valor en la consola es undefined, después de actualizar.  
-Paso. Añado siempre el link, funcione o no (estos serán muy muy pocos casos).   
+Paso. Añado siempre el link, funcione o no (estos serán muy muy pocos casos).  
 

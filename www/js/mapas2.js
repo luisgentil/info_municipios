@@ -30,9 +30,9 @@ function initMap() {
   localizar(map, geocoder); // tarea 
   map.addListener('click', function(e) {  // tarea: escuchar eventos de click sobre el mapa
     reverseGeocode(geocoder, e.latLng, map)}); //  
-}
 // tarea: actualizar ubicación
-var actualizando = setInterval(function(geocoder) {actualizar(map, geocoder)}, 120000); 
+var actualizando = setInterval(function(geocoder){actualizar(map, geocoder)}, 120000); // 120000 para producción  
+} 
 
 // TAREA: buscarSitios
 function buscarSitios(position, map) {
@@ -79,11 +79,11 @@ function localizar(map, geocoder){
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) { //watchCurrentPosition
       var pos = {lat: position.coords.latitude, lng: position.coords.longitude}; // posición dtectada, en coordenadas
-      reverseGeocode(geocoder, pos, map); //
       map.setCenter(pos);
 //      map.setZoom(12);
-      console.log(pos);
+      console.log(geocoder);
       pintarGlobo(pos, map, "aquí");
+      reverseGeocode(geocoder, pos, map); //
       buscarSitios(pos, map);
     }, function() {handleLocationError(true)});
   } 
@@ -109,7 +109,7 @@ function pintarGlobo(latLong, map, info) {
 }
 
 // Función de Tarea: reverseGeocode, averigua qué hay en el punto del mapa donde se hace click 
-function reverseGeocode(geocoder, latLong, map) { 
+function reverseGeocode(geocoder, latLong, map) { //
   geocoder.geocode({'location': latLong, 'language':'es'}, function(results, status) {
     if (status === 'OK') {
       if (results[0]) {
@@ -164,7 +164,8 @@ buscarSitios(latLong, map);
 
 // Tarea: actualizar cada x tiempo
 function actualizar(map, geocoder) {
-localizar(map, geocoder); 
+  var geocoder = new google.maps.Geocoder;  // creo que esto es lo que faltaba, pasar un nuevo geocoder en cada actualización
+  localizar(map, geocoder); 
 }
 
 // Comprobar si existe una página concreta en Wikipedia
@@ -214,3 +215,5 @@ function buscarFirebase(ambito, pueblo) {
   document.getElementById("productoTipico").textContent = "Productos típicos: "  + resultado;
 });
 }
+
+ // }esto cierra el bubcle principal, en lugar de la llave de cierre en 33

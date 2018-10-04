@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.phonegap.Pueblos" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>InfoTown</name>
+<widget id="com.phonegap.Pueblos" version="5.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>Pueblos</name>
     
     <description>
-        Recibe información útil de los lugares por los que vas pasando. 
+        Descubre información útil de los lugares por los que vas pasando. 
     </description>
     
     <author email="cursofactor@gmail.com" href="http://pilgrim.neocities.org/infoTown">
@@ -12,7 +12,10 @@
     
     <plugin name="cordova-plugin-whitelist" source="npm" spec="~1.2.1" />
     <plugin name="cordova-plugin-file" source="npm" spec="~4.1.1" />
-    <plugin name="cordova-plugin-geolocation" value="cordova-plugin-geolocation" source="npm"/>
+    <!--plugin name="cordova-plugin-geolocation" value="cordova-plugin-geolocation" source="npm"/-->
+    <plugin name="cordova-plugin-geolocation" spec="~4">
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="This app uses your location for maps." />
+</plugin>
         
     <platform name="android">    
       <icon src="icon.png" />
@@ -21,6 +24,13 @@
       <icon src="icon.png"   gap:platform="android"    gap:qualifier="hdpi" />
       <icon src="icon.png"   gap:platform="android"    gap:qualifier="xhdpi" />
     </platform>
+    <!--probando la solución de https://gist.github.com/jadwigo/3fbd0cc41242d256e7b12e7dc52bf159
+    otra opción sería añadir version="2.1.0" al plugin -->
+    <platform name="android">
+        <uses-permission name="android.permission.ACCESS_COARSE_LOCATION" />
+        <uses-permission name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+</platform>
     
     <content src="index.html" />
     <access origin="*" />

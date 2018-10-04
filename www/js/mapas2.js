@@ -16,7 +16,7 @@ firebase.initializeApp(config);
 //////////////////////// sección o "bucle" principal  ///////////////////
 
 function initMap() {
-  var sitio = {lat: 37.398262, lng: -6.008114}; //{lat: 37.419193, lng: -5.981978};
+  var sitio = {lat: 46.513916, lng: 4.676169}; //{lat: 37.419193, lng: -5.981978};
 
   map = new google.maps.Map(document.getElementById('map'), {
     center: sitio,

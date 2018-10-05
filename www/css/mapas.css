@@ -1,14 +1,35 @@
 
-#map {
-height: 75%;
+.map {
+height: 100%;
 border: 1px;
 }
 
-#municipio {
-	font-size: 120%;
+.municipio {
+	/*font-size: 120%;*/
 	color: green;
 }
 
+.floating-panel {
+	position: absolute;
+	max-width: 30%;
+	max-height: 75%;
+	overflow: auto;
+	top: 5px;
+	left: 5px;
+	z-index: 5;
+	background-color: #fff;
+	text-align: left;
+	font-family: 'Roboto','sans-serif';
+	/*font-size: small;*/
+	/*line-height: 30px;*/
+	padding-left: 10px;
+	/*margin-left: 380px;*/
+	z-index: 5;
+	background-color: #fff;
+	padding: 5px;
+	border: 1px solid #999;
+
+}
 
 
 html, body {
@@ -17,7 +38,7 @@ margin: 0;
 padding: 0;
 }
 
-div.wiki {
+.wiki {
 padding: 5px;
 font-family: sans-serif;
 font-weight: bold;
@@ -25,16 +46,23 @@ height: 20%;
 background-color: white;
 }
 
-#info_nombre {
+.info_nombre {
 	font-weight: normal;
 }
 
-#info_plus {
+.info_plus {
 	font-size: small;
 	font-weight: normal;
+	max-height: 30%;
+	overflow: auto;
 }
 
-#init_LatLong {
+.init_LatLong {
 	visibility: hidden;
 }
 
+.productoTipico {
+	visibility: hidden;}
+
+	.informaciones {
+	font-size: small;

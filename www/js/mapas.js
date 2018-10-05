@@ -13,7 +13,6 @@ var initZoom = 8;                                        //37.419193,-5.991978 e
   firebase.initializeApp(config);
     var databaseService = firebase.database();
   
-
 //////////////////////// sección o "bucle" principal  ///////////////////
 // el mapa se inicia
 function initMap() {
@@ -38,7 +37,7 @@ function initMap() {
   var geocoder = new google.maps.Geocoder;
   var infowindow = new google.maps.InfoWindow;
 
-  localizar(map, geocoder);   
+  localizar(map, geocoder);
 
   // con este eventListener accedemos a las coordenadas del click
   map.addListener('click', function(e) {
@@ -52,18 +51,19 @@ function initMap() {
   // 
   var actualizando = setInterval(function() {actualizar(map, geocoder)}, 120000); // este valor debería ser 60000, al menos, 
                                                   // pero lo dejo para test en PhoneGap
-}
+
 //////////////////////fin del bucle principal, comienza la sección de funciones ///////////////////
 // Otras funciones para al App, algunas sirven y otras no XD
 
 function actualizar(map, geocoder) {
-  //var d = new Date ();// sólo sirve en desarrollo
+  //var d = new Date ();// elimino esta línea, solo sirve en desarrollo
   //  var map = new google.maps.Map(document.getElementById('map'));
   //  var geocoder = new google.maps.Geocoder;
   //  var infowindow = new google.maps.InfoWindow;
-  //document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString(); 
+  //document.getElementById("info_plus").innerHTML = "actualizando..." + d.toLocaleTimeString(); // elimino esta línea, solo sirve en desarrollo
   //var nuevaPos = navigator.geolocation.watchPosition(function(){pintarGlobo(initLatLong, map,info)}, function() {handleLocationError(true)});
   localizar(map, geocoder); // esto ahora va, pero creo que no es lo ideal. probar en phone gap
+
 }
 
 
@@ -86,6 +86,7 @@ function pintarGlobo(latLong, map, info) { // pinta un globo (marker) y centra e
 
 
 function localizar(map, geocoder){  // Encuentra la situación actual del dispositivo
+  var pos = {};
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) { //watchCurrentPosition
       var oldPos = document.getElementById("init_LatLong").innerText;  // debería ser la posición anterior
@@ -95,6 +96,8 @@ function localizar(map, geocoder){  // Encuentra la situación actual del dispos
 //      map.setZoom(12);
 //      if (oldPos === pos) {document.getElementById("informaciones").innerText = "Posición repetida";}
       document.getElementById("init_LatLong").innerText = pos.value;  // ¿esto cuando se ve??
+      console.log(pos);
+      buscarSitios(pos);
     }, function() {handleLocationError(true)});
   } 
   else {  // Browser doesn't support Geolocation
@@ -219,6 +222,37 @@ function comprobarEnWiki(pueblo, provincia) {
    ref.child(pueblo.toLowerCase()).on("value", function(snapshot){resultado = (snapshot.val() || "(sin datos)");
     document.getElementById("productoTipico").textContent = "Productos típicos: "  + resultado;//+ pueblo + ", " + resultado;
   });
+  }
+
+function buscarSitios(position, map) {
+  var service = new google.maps.places.PlacesService(map);
+  service.nearbySearch({
+    location: position,
+    radius: 500,
+    type: ['point_of_interest']
+      }, callback);
+}
+
+
+  function callback(results, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {document.getElementById("init_LatLong").textContent += results[i].types[0] + " - ";}
+     }
+   }
+
+/*  function createMarker(place, map) {
+    var placeLoc = place.geometry.location;
+    var marker = new google.maps.Marker({
+      map: map,
+      position: place.geometry.location,
+      icon: 'images/ic_local_cafe_black_24px.svg'
+    });
+*/
+
+   // google.maps.event.addListener(marker, 'click', function() {
+   //   infowindow.setContent(place.name);
+   //   infowindow.open(map, this);
+   // });
   }
 
 //=========================== VERSIÓN ANTIGUA - ANTERIOR QUE FUNCIONABA EN PROTO 2 ====================

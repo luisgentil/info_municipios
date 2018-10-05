@@ -1,5 +1,5 @@
-[PMV](#pmv)  
-[Bugs pendientes](#bugs-pendientes)  
+[PMV](#pmv)
+[Bugs pendientes](#bugs_pendientes)
 
 # Historia
 [aquí estará el texto de la historia de esta app]  
@@ -22,7 +22,7 @@ Los códigos usados como base son de las siguientes fuentes:
 (Esta información corresponde a: nociones generales, y la geocodificación de direcciones estáticas conocidas, a través del servicio web de geocodificación).  
 La geocodificación inversa consiste en obtener información comprensible a partir de latitud + longitud. Hay que tener en cuenta que "el geocodificador inverso a menudo devuelve más de un resultado. Las “direcciones” no representan solo direcciones postales, sino cualquier forma de asignar nombres geográficos a una ubicación. Por ejemplo, al aplicarse geocodificación a un punto en la ciudad de Chicago, dicho punto puede etiquetarse como una dirección, como la ciudad (Chicago), como el estado (Illinois) o como un país (Estados Unidos). Todas las direcciones corresponden al geocodificador. El geocodificador inverso devuelve todos estos resultados.  (...) Las direcciones se devuelven en el orden de mayor a menor coincidencia." 
 Más info: https://developers.google.com/maps/documentation/javascript/geocoding?hl=es-419#ReverseGeocoding  
-    
+  
 Una consulta como: http://maps.googleapis.com/maps/api/geocode/json?&latlng=37.419193,-5.991978 ofrece una lista de resultados en formato JSON. Por tanto, accesible vía consultas web, como:  https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY , o **por ejemplo**:  
 https://maps.googleapis.com/maps/api/geocode/json?latlng=37.516311,-5.970018&language=es&result_type=political&key=AIzaSyAr6WjP2-THB-i9F3DaaBkmmB0cUmHb3i0  
 que muestra los resultados en idioma español, y los limita al tipo "political", lo cual simplifica los resultados.  
@@ -114,7 +114,7 @@ Es posible acceder a cualquier contenido mediante la API de MediaWiki. Por ejemp
 Para saltar el CORS, hay que saltar la restricción del origen, permitiendo cualquier origen, añadiendo "&origin=*" en la consulta.  
 En el ejemplo anterior, https://es.wikipedia.org/w/api.php?action=query&titles=Montehermoso&prop=revisions&rvprop=content&format=json&origin=* sí puede ser cargado en un div a partir de la respuesta a esa consulta.  
 
-Por otra parte, para la respuesta de esa consulta es un JSON (clave-valor) que incluye los datos de la página (valor) en el campo (clave) '201387' (un número), distinto para cada municipio, es decir: el pageid. Pero éste campo clave cambia con cada página de Wikipedia, así que para reutilizar la búsqueda hay que recorrer las claves del Json, recorriendo todas las claves del objeto, con un loop for "*In a for-in loop, use the bracket notation to access the property values:*" https://www.w3schools.com/js/js_json_objects.asp  
+Por otra parte, para la respuesta de esa consulta es un JSON (clave-valor) que incluye los datos de la página (valor) en el campo (clave) '201387' (un número), distinto para cada municipio, es decir: el pageid. Pero éste campo clave cambia con cada página de Wikipedia, así que para reutilizar la búsqueda hay que recorrer las claves del Json, recorriendo todas las claves del objeto, con un loop for "In a for-in loop, use the bracket notation to access the property values:" https://www.w3schools.com/js/js_json_objects.asp  
 `for (numero in respuesta.query.pages) {(···)}`  
 
 Según he leído en (https://stackoverflow.com/questions/26421022/wikimedia-api-extract-json-or-xml-from-revision-wikitext-to-use-in-php) y en (https://www.mediawiki.org/wiki/API:Parsing_wikitext), podemos obtener la información PARSED desde cualquier página de la wikipedia, usando la action adecuada: parse. Así, la consulta a realizar sería:  
@@ -185,8 +185,8 @@ La fuente de información más práctica que he encontrado: https://desarrollowe
 Hay mucha información y ejemplos acerca de cómo grabar datos, y poco sobre cómo leerlos (en mi ignorancia).  
 Por lo que he entendido: no hay que leer, sino suscribirse a los cambios del valor. Es decir, podemos tener actualizados los datos mediante la conexión que hace (y mantiene) Firebase. Así que para leer, con el valor inicial es suficiente.  
 El código de búsqueda / lectura:  
-El código en el html: `<script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>`
-Y el script, algo así:
+en el html: `<script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>`  
+Y el script, algo así:  
 ```javascript
 <script>
   // Initialize Firebase
@@ -211,6 +211,7 @@ Y el script, algo así:
     }
   </script>
 ```
+
 Ha sido más sencillo cargar una lista inicial de todos los municipios, donde se ha incluido un producto genérico para aquellos que no tenían producto típico; mucho mejor que generar 2 ó 3 consultas, condicionales por si la respuesta es null, y líos varios. Una consulta, una respuesta (específica o genérica).  
 DESECHADA {La idea es: crear un ref de municipios, y si la respuesta es vacía (o null), buscar en un ref de provincias, y si la respuesta es null, en un ref de comunidades autónomas.  
 Al localizar el pueblo, no sólo hay que recuperar el municipio, también necesitaremos recuperar la provincia y la comunidad.  
@@ -238,74 +239,92 @@ He creado un archivo muy simple para actualizar la base de datos de municipios, 
 </script>
 ```
 
+**Búsqueda de sitios: google Place**  
+En el ejemplo de '', se ve fácilmente cómo obtener resultados según el tipo de place consultado.  
+En la página '' se especifica lo siguiente:  
+_Además de los tipos incluidos en la tabla 1 anterior, **se pueden obtener los siguientes tipos en los resultados de una búsqueda de sitios**. Para obtener información más detallada sobre estos tipos, consulta Tipos de direcciones en la sección de respuestas de geocodificación.
+Nota: Los tipos que se incluyen a continuación **no se admiten en el filtro type de una búsqueda de sitios** ni en la propiedad types cuando agregas un sitio._  
+Por tanto: no se pueden consultar según 'point_of_interest', o 'locality', pero sí podremos usarlos si aparecen en los resultados de búsqueda.  
+Lo que se me ocurre, para acometer la idea original de esta app (obtener información de los puntos de interés y municipios mientras vas viajando) es lo siguiente: hacer una búsqueda de Places muy amplia, y revisar los resultados filtrando sólo aquellos que sean de type = 'point_of_interest'.  
+Probar, a ver qué sale.  
+
+
+
 # Fases de ejecución  
 ## Prototipos  
-Primer Prototipo: una app que, al abrir, localiza la ubicación del usuario y centra el mapa, y abre un marcador con el nombre del municipio en el que está situado. Además, al hacer click en un punto del mapa, sitúa un marcador en ese punto, centra el mapa en ese marcador, abre una ventana de información que contenga el Municipio del punto donde se hizo click, y en la ventana de información añade un enlace con la página de Wikipedia de ese municipio (sólo enlace).  
+**Primer Prototipo**: una app que, al abrir, localiza la ubicación del usuario y centra el mapa, y abre un marcador con el nombre del municipio en el que está situado. Además, al hacer click en un punto del mapa, sitúa un marcador en ese punto, centra el mapa en ese marcador, abre una ventana de información que contenga el Municipio del punto donde se hizo click, y en la ventana de información añade un enlace con la página de Wikipedia de ese municipio (sólo enlace).  
 
 Segundo Prototipo: además, busca el municipio en Wikipedia, e informa si existe la web o no en la ventana de información.  
 
 Tercer Prototipo: además, extrae el primer párrafo de la presentación en Wikipedia, y dispone de una función que averigua las secciones que tiene la Wikipedia para ese municipio, y las muestra en la ventana de información.  
 
-Cuarto Prototipo: incorpora una función que añade información sobre algún producto típico del municipio a partir de una Base de Datos {(desechado: '*~~si no, típico de la provincia, o de la CCAA.~~*'}  
+**Cuarto Prototipo**: incorpora una función que añade información sobre algún producto típico del municipio a partir de una Base de Datos {(desechado: '*~~si no, típico de la provincia, o de la CCAA.~~*'}  
 
-**Quinto Prototipo**: además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio {desechado *~~, o de la provincia, o de la región~~*}. {o **pasteles**, mientras no tengamos una lista más completa}.  
+Quinto Prototipo: además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio {desechado *~~, o de la provincia, o de la región~~*}. o {**pasteles**, mientras no tengamos una lista más completa}.  
 
 ## PMV  
-El **PMV** dispone de una ventana que muestra el mapa, y una ventana que muestra información; cuando se inicia, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio y lo muestra en una ventana, busca información sobre el municipio en Internet, incluyendo algún producto típico, y presenta la lista de secciones de la Wikipedia en la ventana de información. Además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio, o de la provincia, o de la región. 
+El **PMV** dispone de una ventana que muestra el mapa, y una ventana que muestra información; cuando se inicia, la app averigua la ubicación del usuario, centra el mapa en ese punto, averigua el municipio y lo muestra en una ventana, busca información sobre el municipio en Internet, incluyendo algún producto típico, y presenta la lista de secciones de la wikipedia en la ventana de información. Además, muestra una serie de establecimientos cercanos a la ubicación actual, relacionados con algún producto típico del municipio, o de la provincia, o de la región. 
 El PMV funciona en escritorio *y en Android*.  
 
 [Posible derivación: ofrece información de una BD, incluyendo producto típico del pueblo, y busca tiendas que lo vendan en los alrededores de la ubicación actual.]  
 
 	30/08/2017  
-	Fases de trabajo  						versión		terminado  
-	------------------------------------------------------------------------------------------  
-	-Elegir base de código 						0.0 		 ok 31/08  
-	-Separar html, css, js 						0.1 		 ok 31/08  
+	Fases de trabajo  								versión		terminado  
+	----------------------------------------------------------------------  
+	-Elegir base de código 							0.0 		 ok 31/08  
+	-Separar html, css, js 							0.1 		 ok 31/08  
 	-Definir funciones necesarias:  
 		-Inicial, geolocalizar posición				0.1 		 ok 07/09  
-		-Centrar mapa  						0.2 		 ok 31/08  
-		-Pintar marcador 					0.2 		 ok 04/09  
-		-Abrir InfoWindow 					0.2 		 ok 01/09  
+		-Centrar mapa  								0.2 		 ok 31/08  
+		-Pintar marcador 							0.2 		 ok 04/09  
+		-Abrir InfoWindow 							0.2 		 ok 01/09  
 		-Detección de click en el mapa 				0.2 		 ok 31/08  
-		-Geolocalización inversa 				0.3 		 ok 05/09  
-		-Completar InfoWindow con Municipio 			0.3 		 ok 07/09  
-		-Generar función enlace a Wikipedia 			0.5 		 ok 08/09  
-		-Diseñar el PMV: elementos html y css			0.6 		 ok 12/09  
+		-Geolocalización inversa 					0.3 		 ok 05/09  
+		-Completar InfoWindow con Municipio 		0.3 		 ok 07/09  
+		-Generar función enlace a Wikipedia 		0.5 		 ok 08/09  
+		-Diseñar el PMV: elementos html y css		0.6 		 ok 12/09  
 		-Probar en android vía PhoneGap  			0.7 		 ok 11/09  
-		-Generar función actualización 60 segundos		0.8 		 ok 12/09  
+		-Generar función actualización 60 segundos	0.8 		 ok 12/09  
 		-Añadir plugins Cordova, etc.				0.9 		 ok 13/09  
-		-Empaquetar Prototipo 1 				1.0 		 ok 18/09  
+		-Empaquetar Prototipo 1 					1.0 		 ok 18/09  
 
-		-Func. comprobar si existe pueblo en Wikip.		1.1 		 ok 25/09  
-		-Actualizar info enlace en pantalla:			1.2 		 ok 26/09  
-			limpiar, documentar, redacción final		1.3 		 ok 27/09  
-		-Empaquetar Prototipo 2 				2.0 		 ok 27/09  
+		-Func. comprobar si existe pueblo en Wikip.	1.1 		 ok 25/09  
+		-Actualizar info enlace en pantalla:		1.2 		 ok 26/09  
+			limpiar, documentar, redacción final	1.3 		 ok 27/09  
+		-Empaquetar Prototipo 2 					2.0 		 ok 27/09  
 
 		-Generar función Wikipedia  				2.1  -->  	--> ver abajo  
-				-descargar texto					 ok 08/09  
-				-averigua secciones wikipedia 				 ok 28/09  
-				-averiguar código nº			2.2 		 ok 29/09  
-				-extraer primer párrafo			2.3 		 ok 02/10  
+				-descargar texto								 ok 08/09  
+				-averigua secciones wikipedia 					 ok 28/09  
+				-averiguar código nº				2.2 		 ok 29/09  
+				-extraer primer párrafo				2.3 		 ok 02/10  
 				-presenta 1º párrafo y secciones 	2.4 		 ok 03/10  
-					bug: links con espacios		2.4.1  		 ok 03/10  
+					bug: links con espacios			2.4.1  		 ok 03/10  
 					bug: link a wiki de pueblos que	  
-					no tienen wiki (Torrepalma)	2.4.2 		 ok 04/10  
-		Empaquetar prototipo 3 					3.0 		 ok 04/10  
-		
-		-FireBase con datos de municipios			3.1 		 ok 05/10  
-		-Función para conectar con FireBase 			3.1 		 ok 06/10  
-		-Modificar maps.js para obtener prov y CCAA 		3.1 		 ok 06/10  
-		-Función para recuperar respuestas 			3.2		 ok 10/10  
-			- para municipios  				3.2 		 ok 09/10  
-			- para provincias				3.2 		 desechado  
-			- para CCAA 					3.2 		 desechado  
-		Empaquetar prototipo 4 					4.0 		 ok 10/10    
+						no tienen wiki (Torrepalma)	2.4.2 		 ok 04/10  
+		Empaquetar prototipo 3 						3.0 		 ok 04/10  
 
-		Función para búsqueda en G Places			4.1 		 ok 20/10   
-		iconos diferenciados						  	 ok 23/10  
+		-FireBase con datos de municipios			3.1 		 ok 05/10  
+		-Función para conectar con FireBase 		3.1 		 ok 06/10  
+		-Modificar maps.js para obtener prov y CCAA 3.1 		 ok 06/10  
+		-Función para recuperar respuestas 			3.2			 ok 10/10  
+			- para municipios  						3.2 		 ok 09/10  
+			- para provincias						3.2 		 desechado  
+			- para CCAA 							3.2 		 desechado  
+		Empaquetar prototipo 4 						4.0 		 ok 10/10  
+
+		Función para búsqueda en G Places			4.1 		 ok 20/10  
+		iconos diferenciados						  			 ok 23/10  
 		¿siempre, o sólo si pulsa botón/link?		  			 no  
-		la función elimina los marcadores anteriores	  			 no  
-		Empaquetar prototipo 5 					5.0 		 ok 06/11   
+		la función elimina los marcadores anteriores	  		 no  
+		Empaquetar prototipo 5 						5.0 		 ok 06/11  
+		Cambiar zoom inicial (alejar)	  
+		Ventana de texto: flotante en el mapa 		5.2 		  
+		Forzar posición horizontal, y texto lateral flotante	  
+		
+
+
+
 
 
 
@@ -327,12 +346,12 @@ Desventajas 			1ª opción: 											2ª opción:
 El planteamiento anterior es antiguo, de principios de septiembre, cuando aún no sabía manejar la respuesta de Wikipedia en formato JSON.  
 Ahora parece más lógico produndizar en el tratamiento del json, 
 
-# Bugs pendientes
-## Bug 3: pueblos como Zalamea la Real  
+# Bugs pendientes  
+## Bug 3: pueblos como Zalamea la Real
 El caso de pueblos que, como resultado de la consulta, ofrece información de la complementaria (lateral), no de la página principal.  
-En este caso, el problema se debe a que el término buscado `(<p><b>)`, no existe en el texto. En este caso, incluye un `<br>` entre ambas etiquetas.  
-Si se cambia a otra, como por ejemplo `<b>`, habría problemas en otras ciudades como Sevilla.  
-Se me ocurre: habría que localizar el texto `<b>Municipio</b>`.  
+En este caso, el problema se debe a que el término buscado (<p><b>), no existe en el texto. En este caso, incluye un <br> entre ambas etiquetas.  
+Si se cambia a otra, como por ejemplo <b>, habría problemas en otras ciudades como Sevilla.  
+Se me ocurre: habría que localizar el texto <b>Municipio</b>.  
 HACER PRUEBAS  
 
 
@@ -350,3 +369,11 @@ debe ser un problema de arrastrar un valor anterior, cuando se pincha varias vec
 el problema está en la función actualizar, creo, porque el valor en la consola es undefined, después de actualizar.  
 Paso. Añado siempre el link, funcione o no (estos serán muy muy pocos casos).  
 
+
+DOCUMENTANDO EL ERROR DE FEB-OCT 2018,  
+
+No permite acceder a la ubicación actual: https://forums.adobe.com/thread/2449453  
+Propone una solución parcial: volver a la versión 2.1 del módulo;  esta es la que funciona (04/10/2018).  
+~~más adelante, un ejemplo que funciona con al versión 4: https://gist.github.com/jadwigo/3fbd0cc41242d256e7b12e7dc52bf159  
+
+PERO: falta por probar otra solución, según veo en https://cordova.apache.org/docs/en/2.5.0/cordova/geolocation/geolocation.html~~  

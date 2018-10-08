@@ -1,4 +1,4 @@
-//5.0 /////////////////// variables globales y otras gaitas////////////////
+//5.2 /////////////////// variables globales y otras gaitas////////////////
     var map;
     var infowindow;
 // Initialize Firebase
@@ -16,11 +16,11 @@ firebase.initializeApp(config);
 //////////////////////// sección o "bucle" principal  ///////////////////
 
 function initMap() {
-  var sitio = {lat: 46.513916, lng: 4.676169}; //{lat: 37.419193, lng: -5.981978};
+  var sitio = {lat: 37.315955, lng: -5.995969}; // {lat: 46.513916, lng: 4.676169}
 
   map = new google.maps.Map(document.getElementById('map'), {
     center: sitio,
-    zoom: 13
+    zoom: 12
   });
   // la función de inicio crea el mapa, y después hace otras cosas (tareas) que están en funciones aparte. 
   // Cada una, con su función de éxito + función de error. 
@@ -31,7 +31,7 @@ function initMap() {
   map.addListener('click', function(e) {  // tarea: escuchar eventos de click sobre el mapa
     reverseGeocode(geocoder, e.latLng, map)}); //  
 // tarea: actualizar ubicación
-var actualizando = setInterval(function(geocoder){actualizar(map, geocoder)}, 120000); // 120000 para producción  
+var actualizando = setInterval(function(geocoder){actualizar(map)}, 60000); // 120000 para producción  
 } 
 
 // TAREA: buscarSitios
@@ -76,21 +76,34 @@ function createMarker(place) {
 
 // Encuentra la situación actual del dispositivo
 function localizar(map, geocoder){
+  //*===================___función normal, no en modo demo_____=======================
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) { //watchCurrentPosition
       var pos = {lat: position.coords.latitude, lng: position.coords.longitude}; // posición dtectada, en coordenadas
       map.setCenter(pos);
 //      map.setZoom(12);
       console.log(geocoder);
-      pintarGlobo(pos, map, "aquí");
+//      pintarGlobo(pos, map, "aquí");
       reverseGeocode(geocoder, pos, map); //
       buscarSitios(pos, map);
     }, function() {handleLocationError(true)});
   } 
   else {  // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
-  }
+  } //*
+  /*/===================___función para modo demo_____=======================
+    var center = map.getCenter();
+    var pos = {lat: center.lat() + 0.1, lng: center.lng() + 0.0001};
+     map.setCenter(pos);
+//      map.setZoom(12);
+    console.log(pos);
+
+   //   pintarGlobo(pos, map, "aquí");
+      reverseGeocode(geocoder, pos, map); //
+      buscarSitios(pos, map);
+  /*/// ___fin modo DEMO____
 }
+
 
 // Función de fracaso de 'localizar'
 function handleLocationError(browserHasGeolocation) {
@@ -163,7 +176,7 @@ buscarSitios(latLong, map);
 }
 
 // Tarea: actualizar cada x tiempo
-function actualizar(map, geocoder) {
+function actualizar(map) {
   var geocoder = new google.maps.Geocoder;  // creo que esto es lo que faltaba, pasar un nuevo geocoder en cada actualización
   localizar(map, geocoder); 
 }
